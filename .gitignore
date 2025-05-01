@@ -1,1 +1,10 @@
 .DS_Store
+# LaTeX temporary files in Final_project folder
+Final_project/*.aux
+Final_project/*.bbl
+Final_project/*.blg
+Final_project/*.fls
+Final_project/*.log
+Final_project/*.fdb_latexmk
+Final_project/*.synctex.gz
+Final_project/*.out
