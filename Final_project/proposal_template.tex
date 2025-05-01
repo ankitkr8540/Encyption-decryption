@@ -96,10 +96,6 @@ Provide a table comparing your results to the published results.
 \subsection{Discussion}
 Discuss any issues you faced. Do your results differ from the published ones? If yes, why do you think that is? Did you do a sensitivity analysis (e.g. multiple runs with different random seeds)?
 
-
-\subsection{Error Analysis}
-Perform an error analysis on the model. Include at least 2-3 instances where the model fails. Discuss the error analysis in the paper -- what other analyses could the authors have ran? If you were able to perform additional error analyses, report it here.
-
 \section{Robustness Study}
 
 Robustness in our password management system refers to its ability to maintain security and functionality under adverse conditions or attacks. The system implements cryptographic best practices including PBKDF2 with SHA-256, unique salts, and configurable iterations to protect against common attack vectors such as brute force and rainbow table attacks. Robustness is critical for authentication systems as they are primary targets for attackers - a compromised system can lead to unauthorized access to sensitive data. Our approach balances strong security with acceptable performance to create a resilient system that protects user credentials while remaining usable.
@@ -253,18 +249,7 @@ Throughout the project, we maintained regular team meetings to discuss progress,
 All team members contributed equally to the final writing of this report, with each member drafting sections related to their primary responsibilities and collectively reviewing and refining the complete document.
 
 \section{Conclusion}
-
-Based on our comprehensive reproducibility study, we conclude that the original paper is \textit{partially reproducible}. We were able to successfully reproduce the core findings and achieve performance metrics within 5\% of those reported in the original publication. However, several important considerations emerged from our study:
-
-First, the implementation details provided in the paper were sufficient but lacked some critical information about hyperparameter settings and preprocessing steps. This required significant experimentation to determine optimal configurations that matched the reported results. Future research papers would benefit from more detailed implementation specifications or accompanying code repositories.
-
-Second, our robustness evaluation revealed important limitations not addressed in the original paper. The model's performance degraded significantly under certain perturbation types, particularly when faced with adversarial inputs and resource constraints. This suggests that while the approach is valid under controlled conditions, its real-world applicability may be more limited than implied.
-
-Third, the computational resources required to reproduce the results were substantially higher than indicated in the original work. Our implementation required approximately 2.5 times the reported training time, even when using hardware specifications that matched or exceeded those mentioned by the authors.
-
-These findings highlight the importance of reproducibility studies in verifying and contextualizing published research. While the core claims of the paper hold, our extended analysis provides a more nuanced understanding of the approach's strengths and limitations. We recommend that future work in this area should place greater emphasis on robustness evaluation and provide more comprehensive implementation details to facilitate reproduction.
-
-In summary, the paper presents a valuable contribution to the field, but its practical application requires careful consideration of the limitations identified through our reproducibility study and robustness analysis.
+INSERT
 
 % \section{Credits}
 
