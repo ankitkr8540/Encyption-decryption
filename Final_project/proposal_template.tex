@@ -87,9 +87,6 @@ The performance-security tradeoff in password hashing has been examined by \cite
 
 \section{Experiments}
 
-\subsection{Datasets}
-Please list which datasets you used, whether or not you have access them, and whether or not they are publicly available with the same preprocessing and train / dev / tests as the previous work you will be comparing to (if applicable). If you plan to collect your own dataset for evaluating robustness, please describe clearly the data plan (the data source, how you plan to collect it, how you would preprocess it for the task, etc.).
-
 \subsection{Implementation} 
 Please provide a link to a repo of your reimplementation (if applicable) and appropriately cite any resources you have used.
 
@@ -99,65 +96,100 @@ Provide a table comparing your results to the published results.
 \subsection{Discussion}
 Discuss any issues you faced. Do your results differ from the published ones? If yes, why do you think that is? Did you do a sensitivity analysis (e.g. multiple runs with different random seeds)?
 
-\subsection{Resources}
-Discuss the cost of your reproduction in terms of resources: computation, time, people, development effort, communication with the authors (if applicable).
-
 
 \subsection{Error Analysis}
 Perform an error analysis on the model. Include at least 2-3 instances where the model fails. Discuss the error analysis in the paper -- what other analyses could the authors have ran? If you were able to perform additional error analyses, report it here.
 
 \section{Robustness Study}
 
-Our robustness evaluation focuses on assessing how well the reproduced model performs under varying conditions not explicitly addressed in the original paper. We developed a systematic approach to test the model's resilience against three key types of perturbations: input variations, resource constraints, and adversarial scenarios.
+Robustness in our password management system refers to its ability to maintain security and functionality under adverse conditions or attacks. The system implements cryptographic best practices including PBKDF2 with SHA-256, unique salts, and configurable iterations to protect against common attack vectors such as brute force and rainbow table attacks. Robustness is critical for authentication systems as they are primary targets for attackers - a compromised system can lead to unauthorized access to sensitive data. Our approach balances strong security with acceptable performance to create a resilient system that protects user credentials while remaining usable.
 
-\subsection{Input Variations}
-
-To evaluate robustness against input variations, we created a test suite with perturbed inputs that maintain semantic equivalence but introduce syntactic modifications. These perturbations include:
-
+\subsection{Password Security Implementation}
+Our password management system implements several cryptographic mechanisms to ensure robust credential protection:
 \begin{itemize}
-    \item Character-level noise (random insertions, deletions, substitutions)
-    \item Word-level modifications (synonyms, paraphrasing)
-    \item Structural alterations (sentence reordering, parsing tree modifications)
-    \item Multilingual inputs and code-switched content
+  \item \textbf{PBKDF2 with SHA-256:} The system leverages PBKDF2 with SHA-256 to derive cryptographic keys from passwords, providing resistance against hardware-accelerated attacks.
+  \item \textbf{Unique Salt Generation:} Each password receives a 16-byte random salt generated via the Web Crypto API, effectively preventing precomputed attacks and ensuring identical passwords produce different hashes.
+  \item \textbf{Configurable Iteration Counts:} Users can adjust PBKDF2 iterations (10,000-500,000) through a slider interface, allowing customization of the security-performance tradeoff. Higher iterations increase computational complexity for attackers.
+  \item \textbf{256-bit Key Length:} The derived 256-bit keys provide substantial security margin against future advances in computational capabilities.
 \end{itemize}
 
-Each perturbation category contains 100 examples derived from the original test set, allowing us to measure performance degradation systematically.
+This implementation follows current cryptographic best practices while offering flexibility to adapt to different security requirements and computing environments.
 
-\subsection{Resource Constraints}
+\subsection{Error Handling and Input Validation}
 
-We tested the model's ability to function under various resource constraints that might occur in real-world deployments:
-
-\begin{itemize}
-    \item Memory limitations (reduced batch sizes, gradient accumulation)
-    \item Computation restrictions (quantized weights, pruned network architectures)
-    \item Inference time pressure (early exit strategies, progressive computation)
-    \item Hardware variability (CPU-only environments, mobile device simulations)
-\end{itemize}
-
-This analysis is particularly important for assessing deployment feasibility across diverse computing environments.
-
-\subsection{Adversarial Scenarios}
-
-We implemented targeted adversarial attacks to identify potential vulnerabilities:
+The password management system implements comprehensive error handling and input validation to maintain robustness against both accidental misuse and deliberate attacks:
 
 \begin{itemize}
-    \item Gradient-based attacks (FGSM, PGD with varying epsilon values)
-    \item Black-box attacks (synonym substitution, character manipulation)
-    \item Data poisoning simulations (contaminated training examples)
-    \item Concept boundary testing (edge cases between classification categories)
+   \item \textbf{Form Validation:} All input forms require essential fields to be completed before submission through HTML5's ``required'' attribute, preventing incomplete data from being processed.
+   
+   \item \textbf{Duplicate Username Detection:} The system proactively checks for existing usernames during registration, providing clear error messages and preventing accidental or malicious overwrites of existing accounts.
+   
+   \item \textbf{Informative Error Messages:} The system delivers contextual error messages that are informative enough to guide legitimate users while avoiding excessive information disclosure that could aid attackers.
+   
+   \item \textbf{Failed Authentication Handling:} Login and password change operations verify credentials before performing sensitive actions, with standardized ``Invalid username or password'' messages that don't reveal which specific credential was incorrect.
+   
+   \item \textbf{Visual Feedback:} Color-coded status messages (green for success, red for errors) provide immediate visual feedback on operation outcomes, enhancing user awareness of system state.
+   
+   \item \textbf{Timeout-based Message Clearing:} Status messages automatically clear after a short period, reducing the window for shoulder-surfing attacks and maintaining a clean interface.
 \end{itemize}
 
-\subsection{Evaluation Metrics}
+These measures ensure the system remains stable and secure when handling both valid and invalid inputs, contributing significantly to overall robustness.
 
-For each robustness dimension, we report:
+\subsection{Performance Considerations}
+
+The password management system incorporates performance measurement and configuration options that allow for explicit security-performance tradeoffs:
+
 \begin{itemize}
-    \item Relative performance degradation compared to standard test conditions
-    \item Consistency of outputs under perturbations (using Jaccard similarity)
-    \item Recovery capability after perturbation (elasticity measure)
-    \item Confidence calibration under challenging conditions
+    \item \textbf{Configurable PBKDF2 Iterations:} The system implements user-configurable iteration counts ranging from 10,000 to 500,000 (with increments of 10,000), allowing users to explicitly balance security strength against computational cost. The default setting is 100,000 iterations.
+    
+    \item \textbf{Real-time Performance Metrics:} The system measures and displays actual performance metrics using the browser's high-resolution \texttt{performance.now()} API, capturing millisecond-precision timing for all cryptographic operations.
+    
+    \item \textbf{Operation-specific Measurements:} Distinct performance measurements are tracked for:
+    \begin{itemize}
+        \item Password registration (key derivation time)
+        \item Login verification (key derivation and comparison time)
+        \item Password changes (comparing performance between old and new password configurations)
+    \end{itemize}
+    
+    \item \textbf{Performance Feedback:} Users receive immediate performance feedback after each operation, displaying the operation duration in milliseconds alongside the iteration count used, creating awareness of the security-performance relationship.
+    
+    \item \textbf{Comparative Analysis:} When changing passwords, the system provides side-by-side comparison between previous and new password performance metrics, enabling users to make informed decisions about security configurations.
 \end{itemize}
 
-Our robustness benchmark is publicly available at [repository link] to facilitate future comparisons and extensions by other researchers.
+These performance features enable a transparent, user-controlled approach to the fundamental security-performance tradeoff inherent in password hashing, allowing appropriate configurations based on specific security requirements and available computational resources.
+
+\subsection{Potential Vulnerabilities and Mitigations}
+
+Despite the implementation of modern cryptographic techniques, several potential vulnerabilities exist in both the system architecture and the cryptographic methods employed:
+
+\begin{itemize}
+   \item \textbf{PBKDF2 Limitations:} While PBKDF2 with SHA-256 is a standard approach, it remains vulnerable to hardware acceleration attacks using GPUs or ASICs. More memory-intensive key derivation functions like Argon2 or scrypt would provide stronger resistance against specialized hardware attacks by requiring significant memory alongside computational resources.
+   
+   \item \textbf{Fixed Salt Length:} The implementation uses a 16-byte salt, which meets minimum standards but could be strengthened. Increasing the salt length to 32 bytes would provide additional protection against precomputation attacks without significant performance impact.
+   
+   \item \textbf{Insufficient Minimum Iterations:} The system allows iteration counts as low as 10,000, which may be insufficient against modern hardware capabilities. OWASP recommends a minimum of 310,000 iterations for PBKDF2-HMAC-SHA256. The slider should enforce higher minimum values to prevent users from selecting dangerously low settings.
+   
+   \item \textbf{Browser Crypto API Limitations:} The Web Crypto API implementation may vary across browsers and could potentially use different PBKDF2 parameters or pseudorandom number generators with varying security properties. Validation testing across multiple browsers would help identify inconsistencies.
+   
+   \item \textbf{Side-Channel Vulnerability:} The precise performance timing displayed after operations could potentially leak information about password characteristics through timing side channels. Implementing constant-time comparison operations and adding random delays would help mitigate this class of attacks.
+\end{itemize}
+
+These cryptographic vulnerabilities complement the architectural concerns about client-side security and localStorage usage, presenting a more comprehensive view of the system's security posture and areas for improvement.
+
+\subsection{Conclusion and Future Improvements}
+
+The password management system demonstrates several robust security features including PBKDF2 with SHA-256 hashing, unique cryptographic salts, configurable iteration counts, comprehensive error handling, and transparent performance metrics. These elements collectively create a system that balances security requirements with performance considerations while providing clear user feedback.
+
+\subsection{Suggested Enhancements}
+Future improvements to increase robustness should focus on:
+\begin{itemize}
+   \item Moving critical security operations to a server-side implementation with secure transport
+   \item Adding brute force protection through rate limiting and account lockout mechanisms
+   \item Increasing minimum iteration counts to align with current OWASP recommendations
+   \item Implementing secure credential storage using HTTP-only cookies or server-side databases
+\end{itemize}
+
+These enhancements would address the identified vulnerabilities while maintaining the system's current strengths in usability and security transparency.
 
 \subsection{Results of Robustness Evaluation}
 
