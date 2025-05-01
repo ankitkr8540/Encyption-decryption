@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex proposal_template"] 1746131386.59191 "proposal_template.aux" "proposal_template.bbl" "proposal_template" 1746131485.04041 0
+["bibtex proposal_template"] 1746132549.69161 "proposal_template.aux" "proposal_template.bbl" "proposal_template" 1746132550.68751 0
   "./acl_natbib.bst" 1746130906.75613 47585 c671f071a8f3957857acb307a7173505 ""
-  "./refs.bib" 1746131386.68569 1543 62e6d4b8c51224e66858cc5ff062c15f ""
-  "proposal_template.aux" 1746131484.74958 518 a3a41711eb230c9a56754334a4993b3c "pdflatex"
+  "./refs.bib" 1746131923.3369 1381 999e96d6cdbe0735d8e59dd37e298b58 ""
+  "proposal_template.aux" 1746132550.38109 702 21f4a1c97a1692594ca88f07d8d6c4f2 "pdflatex"
   (generated)
   "proposal_template.bbl"
   "proposal_template.blg"
   (rewritten before read)
-["pdflatex"] 1746131484.15371 "/Users/lingyundai/Desktop/github/Encyption-decryption/Final_project/proposal_template.tex" "proposal_template.pdf" "proposal_template" 1746131485.04056 0
-  "/Users/lingyundai/Desktop/github/Encyption-decryption/Final_project/proposal_template.tex" 1746131483.96292 8638 e36b3ce6147fa7ef4feb7e8cf01be827 ""
+["pdflatex"] 1746132549.80831 "/Users/lingyundai/Desktop/github/Encyption-decryption/Final_project/proposal_template.tex" "proposal_template.pdf" "proposal_template" 1746132550.68766 0
+  "/Users/lingyundai/Desktop/github/Encyption-decryption/Final_project/proposal_template.tex" 1746132548.4668 17182 c8c436b57d287d818e4e0e4e946aac6d ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -17,6 +17,7 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm" 1136768653 4524 6bce29db5bc272ba5f332261583fee9c ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm" 1136768653 2124 2601a75482e9426d33db523edf23570a ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8c.tfm" 1136768653 1352 fa28a7e6d323c65ce7d13d5342ff6be2 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm" 1136768653 4408 25b74d011a4c66b7f212c0cc3c90061b ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm" 1136768653 2288 f478fc8fed18759effb59f3dad7f3084 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm" 1136768653 4640 532ca3305aad10cc01d769f3f91f1029 ""
@@ -40,6 +41,7 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/courier/pcrr7t.vf" 1136768653 1344 6ff472164bf9de0fb2e864b28ac156d9 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf" 1136768653 1372 788387fea833ef5963f4c5bffe33eb89 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf" 1136768653 1380 0ea3a3370054be6da6acd929ec569f06 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmr8c.vf" 1136768653 3556 8a9a6dcbcd146ef985683f677f4758a6 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf" 1136768653 1384 a9d8adaf491ce34e5fba99dc7bbe5f39 ""
   "/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2024/texmf-dist/tex/generic/atbegshi/atbegshi.sty" 1575674566 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
@@ -83,6 +85,7 @@
   "/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd" 1137110629 985 1ed784d7bfe47179f3550d2303b073f8 ""
   "/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1ptm.fd" 1137110629 961 15056f4a61917ceed3a44e4ac11fcc52 ""
   "/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/times.sty" 1586716065 856 8e0e5c8cca7b18e0400f97f5a2b90a99 ""
+  "/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ts1ptm.fd" 1137110629 619 96f56dc5d1ef1fe1121f1cfeec70ee0c ""
   "/usr/local/texlive/2024/texmf-dist/tex/latex/refcount/refcount.sty" 1576624809 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/usr/local/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657483315 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "/usr/local/texlive/2024/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
@@ -92,10 +95,10 @@
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1724188264 8221424 be7aaf8c80ab532f2b5dd30c20b77bd6 ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
   "acl2019.sty" 1746129388.0592 22054 edc2cbf245ed37077f2076a7cda65cc3 ""
-  "proposal_template.aux" 1746131484.74958 518 a3a41711eb230c9a56754334a4993b3c "pdflatex"
-  "proposal_template.bbl" 1746131437.54742 838 818933265f3b04ae60e947e18c2f7fde "bibtex proposal_template"
-  "proposal_template.out" 1746131484.55829 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "proposal_template.tex" 1746131483.96292 8638 e36b3ce6147fa7ef4feb7e8cf01be827 ""
+  "proposal_template.aux" 1746132550.38109 702 21f4a1c97a1692594ca88f07d8d6c4f2 "pdflatex"
+  "proposal_template.bbl" 1746132549.80601 1505 52e132c4122c3a72c6cb700cbb005f74 "bibtex proposal_template"
+  "proposal_template.out" 1746132550.1757 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "proposal_template.tex" 1746132548.4668 17182 c8c436b57d287d818e4e0e4e946aac6d ""
   (generated)
   "proposal_template.aux"
   "proposal_template.log"

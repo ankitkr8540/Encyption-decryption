@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.8.20)  1 MAY 2025 16:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.8.20)  1 MAY 2025 16:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -260,54 +260,102 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 48.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+
+
+]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 97.
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-
-Package natbib Warning: Citation `visconti2020evaluate' on page 1 undefined on input line 65.
-
-
-Package natbib Warning: Citation `pesante2021empirical' on page 1 undefined on input line 65.
+Underfull \hbox (badness 3815) in paragraph at lines 97--98
+[]\OT1/ptm/m/n/10.95 Character-level noise (ran-dom in-ser-tions,
+ []
 
 
-Underfull \vbox (badness 1735) has occurred while \output is active []
+Underfull \hbox (badness 1342) in paragraph at lines 110--111
+[]\OT1/ptm/m/n/10.95 Memory lim-i-ta-tions (re-duced batch sizes,
+ []
 
- [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+Underfull \hbox (badness 3724) in paragraph at lines 113--114
+[]\OT1/ptm/m/n/10.95 Hardware vari-abil-ity (CPU-only en-vi-ron-
+ []
 
 
+Underfull \hbox (badness 3078) in paragraph at lines 124--125
+[]\OT1/ptm/m/n/10.95 Black-box at-tacks (syn-onym sub-sti-tu-tion,
+ []
 
-] (./proposal_template.bbl
-Underfull \hbox (badness 1242) in paragraph at lines 14--19
+
+Underfull \hbox (badness 1424) in paragraph at lines 125--126
+[]\OT1/ptm/m/n/10.95 Data poi-son-ing sim-u-la-tions (con-tam-i-nated
+ []
+
+
+Underfull \hbox (badness 3568) in paragraph at lines 136--137
+[]\OT1/ptm/m/n/10.95 Confidence cal-i-bra-tion un-der chal-leng-ing
+ []
+
+[2]
+Underfull \hbox (badness 3375) in paragraph at lines 151--152
+ []\OT1/ptm/b/n/10.95 Example 2: \OT1/ptm/m/n/10.95 [An-other ex-am-ple show-ing re-
+ []
+
+
+Underfull \hbox (badness 1043) in paragraph at lines 163--164
+\OT1/ptm/m/n/10.95 demon-strates sig-nif-i-cant sen-si-tiv-ity to [spe-cific
+ []
+
+
+Underfull \hbox (badness 1655) in paragraph at lines 165--166
+\OT1/ptm/m/n/10.95 pre-hen-sive ro-bust-ness test-ing be-yond stan-dard
+ []
+
+[3]
+Underfull \hbox (badness 5431) in paragraph at lines 204--205
+\OT1/ptm/m/n/10.95 Based on our com-pre-hen-sive re-pro-ducibil-ity
+ []
+
+
+Underfull \hbox (badness 1325) in paragraph at lines 210--211
+\OT1/ptm/m/n/10.95 spec-i-fi-ca-tions that matched or ex-ceeded those
+ []
+
+(./proposal_template.bbl
+Underfull \hbox (badness 1242) in paragraph at lines 15--18
 []\OT1/ptm/m/n/10 Faruk Tu-ran, Mar-tin Mencke, and Hakki G[]okhan
  []
 
 )
-Underfull \hbox (badness 2088) in paragraph at lines 131--139
+Underfull \hbox (badness 2088) in paragraph at lines 244--252
 \OT1/ptm/m/n/10.95 au-thor=Bonneau, Joseph and Her-ley, Cor-mac
  []
 
 
-Underfull \hbox (badness 5878) in paragraph at lines 131--139
+Underfull \hbox (badness 5878) in paragraph at lines 244--252
 \OT1/ptm/m/n/10.95 jour-nal=2012 IEEE Sym-po-sium on Se-cu-rity
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--148
+Underfull \hbox (badness 10000) in paragraph at lines 253--261
 []\OT1/ptm/m/n/10.95 @articleturan2018recommendation, ti-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--148
+Underfull \hbox (badness 10000) in paragraph at lines 253--261
 \OT1/ptm/m/n/10.95 tle=Recommendation for password-based
  []
 
 
-Underfull \hbox (badness 1226) in paragraph at lines 140--148
+Underfull \hbox (badness 1226) in paragraph at lines 253--261
 \OT1/ptm/m/n/10.95 key deriva-tion: Part 1: Stor-age ap-pli-ca-tions,
  []
 
+[4] [5
 
-Package natbib Warning: There were undefined citations.
-
-[2] (./proposal_template.aux)
+] (./proposal_template.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -317,18 +365,18 @@ Package rerunfilecheck Info: File `proposal_template.out' has not changed.
  )
 (\end occurred when \ifx on line 16 was incomplete) 
 Here is how much of TeX's memory you used:
- 10365 strings out of 474116
- 164811 string characters out of 5743682
- 1944187 words of memory out of 5000000
- 32599 multiletter control sequences out of 15000+600000
- 574313 words of font info for 67 fonts, out of 8000000 for 9000
+ 10425 strings out of 474116
+ 165787 string characters out of 5743682
+ 1945187 words of memory out of 5000000
+ 32632 multiletter control sequences out of 15000+600000
+ 576311 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,10n,93p,1144b,440s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,10n,93p,1139b,505s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on proposal_template.pdf (2 pages, 62454 bytes).
+Output written on proposal_template.pdf (5 pages, 73065 bytes).
 PDF statistics:
- 67 PDF objects out of 1000 (max. 8388607)
- 54 compressed objects within 1 object stream
- 24 named destinations out of 1000 (max. 500000)
+ 109 PDF objects out of 1000 (max. 8388607)
+ 93 compressed objects within 1 object stream
+ 46 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
