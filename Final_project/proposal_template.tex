@@ -51,13 +51,34 @@
 
 Should explain the context of the paper. It should contain the following subsections:
 
-            \subsection{Task / Research Question Description} What is the task the paper is trying to solve or what is the research question they are trying to answer?
+            \subsection{Task / Research Question Description} The task was to develop a tool that can securely store and verify user passwords using unique salts and slow hashing techniques without using the Bcrypt library. The implementation needed to focus on security best practices for password storage.
+
             \subsection{Motivation \& Limitations of existing work} 
-            Have others tried to solve the same task or answer a similar research question? What are they trying to do differently and why? What were the limitations or shortcomings of prior work? 
-            \subsection{Proposed Approach} 
-            Briefly describe the core contribution of the paper's proposed approach.
+            Secure password storage remains a critical challenge in application security. Several approaches to password storage have been developed over time, each with significant limitations:
+            \begin{itemize}
+              \item \textbf{Plain text storage:} Historically, many applications stored passwords in plain text. This approach offers no security if the database is compromised, leading to immediate exposure of all user credentials.
+              
+              \item \textbf{Simple hash functions (MD5, SHA-1, SHA-256):} These general-purpose cryptographic hash functions were not designed specifically for password storage. They are computationally inexpensive, making brute-force attacks feasible with modern hardware. Additionally, they lack built-in salt management, making them vulnerable to rainbow table attacks.
+              
+              \item \textbf{Salted hashes:} Adding salt to passwords before hashing improves security, but many implementations use fixed or predictable salts, reducing their effectiveness against precomputed attacks.
+              
+              \item \textbf{Fast hash iterations:} Some implementations attempt to increase security by repeatedly hashing the password, but without a properly designed algorithm, this approach can be inefficient and still vulnerable to hardware-accelerated attacks.
+              
+              \item \textbf{Bcrypt:} While Bcrypt is widely recommended for password hashing, it has several limitations including a 72-byte password length cap and inconsistent implementations across platforms. Additionally, the task specifications prohibit using Bcrypt for this implementation.
+            \end{itemize}
+            
+            Modern password storage requires features that address these limitations, including unique cryptographically strong salts, computationally expensive hashing algorithms specifically designed for password storage, and configurable parameters to adapt to increasing computational power over time.            
+
+            \subsection{Implementation Approach} 
+            The implementation uses the Web Cryptography API with PBKDF2 (Password-Based Key Derivation Function 2) and SHA-256 hashing. The approach includes:
+            \begin{itemize}
+              \item Generating unique random salts for each password
+              \item Applying PBKDF2 with configurable iteration counts
+              \item Storing password hashes, salts, and metadata in localStorage
+              \item Measuring and displaying performance statistics for different security parameters
+            \end{itemize}
             \subsection{Likely challenges and mitigations} 
-            What is hard about this task / research question? What are your contingency plans if the reproduction turns out to be harder than expected or experiments do not go as planned? 
+            INCLUDE AT THE END 
 
 
 \section{Related Work}
