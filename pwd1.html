@@ -221,6 +221,7 @@
     </div>
 
     <div class="container">
+      <!-- New Registration -->
       <div class="card">
         <h2>Register New User</h2>
         <div id="registerStatus" class="status-message hide"></div>
@@ -306,6 +307,7 @@
         </div>
       </div>
 
+      <!-- Login -->
       <div class="card">
         <h2>Login</h2>
         <div id="loginStatus" class="status-message hide"></div>
@@ -345,6 +347,7 @@
         </div>
       </div>
 
+      <!-- Change Password and Delete User -->
       <div class="card">
         <h2>Change Password</h2>
         <div id="changeStatus" class="status-message hide"></div>
@@ -512,11 +515,18 @@
 
         // Storage methods
         saveToStorage() {
-          // Convert Map to array of entries
-          const entries = Array.from(this.passwordStore.entries());
+          try {
+            // Convert Map to array of entries
+            const entries = Array.from(this.passwordStore.entries());
 
-          // Convert to JSON string and store
-          localStorage.setItem('passwordManager', JSON.stringify(entries));
+            // Convert to JSON string and store
+            localStorage.setItem('passwordManager', JSON.stringify(entries));
+
+            // Debug output - helps track when storage is updated
+            console.log('Saved to localStorage:', entries.length, 'entries');
+          } catch (error) {
+            console.error('Error saving to localStorage:', error);
+          }
         }
 
         loadFromStorage() {
@@ -526,7 +536,11 @@
               // Parse JSON and convert back to Map
               const entries = JSON.parse(stored);
               this.passwordStore = new Map(entries);
-              console.log('Loaded from storage:', this.passwordStore);
+              console.log(
+                'Loaded from storage:',
+                this.passwordStore.size,
+                'entries'
+              );
             } catch (e) {
               console.error('Failed to load from storage:', e);
             }
@@ -536,6 +550,7 @@
         clearStorage() {
           localStorage.removeItem('passwordManager');
           this.passwordStore.clear();
+          console.log('Storage cleared');
         }
 
         // Core crypto methods
@@ -624,8 +639,11 @@
             verificationTime: 'N/A', // Initialize with N/A for decode time
           };
 
+          // Store data and save to localStorage
           this.passwordStore.set(username, passwordData);
           this.saveToStorage();
+
+          console.log(`User ${username} stored with:`, passwordData);
 
           return { ...passwordData, timeTaken };
         }
@@ -667,19 +685,22 @@
           // Update verification time in database if this is a successful verification
           // with the original configuration (not demo mode)
           if (isValid && !overrideOptions) {
-            // Update the user data with the new verification time
+            // Update verification time in user data
             passwordData.verificationTime = timeTaken.toFixed(2);
-            // Store back in the map
+
+            // Update the entry in the map
             this.passwordStore.set(username, passwordData);
+
             // Save to localStorage
             this.saveToStorage();
 
-            // Log for debugging
+            // Debug output
             console.log(
               `Updated verification time for ${username}: ${timeTaken.toFixed(
                 2
               )} ms`
             );
+            console.log('Current user data:', passwordData);
           }
 
           return {
@@ -762,6 +783,7 @@
       const registerForm = document.getElementById('registerForm');
       const loginForm = document.getElementById('loginForm');
       const changePasswordForm = document.getElementById('changePasswordForm');
+      const deleteUserForm = document.getElementById('deleteUserForm');
       const userTableBody = document.getElementById('userTableBody');
 
       // Status messages
@@ -866,6 +888,7 @@
         userTableBody.innerHTML = '';
 
         const userData = passwordManager.getUserData();
+        console.log('Updating table with user data:', userData);
 
         if (userData.length === 0) {
           const row = document.createElement('tr');
@@ -952,6 +975,8 @@
           registerIterationsValue.textContent = '100,000';
           registerKeyLength.value = 256;
           registerKeyLengthValue.textContent = '256';
+
+          // Update the table with the new user
           updateUserTable();
         } catch (error) {
           showStatus(registerStatus, error.message, false);
@@ -966,14 +991,18 @@
         const password = document.getElementById('password').value;
         const demoIterations = parseInt(loginIterations.value);
 
-        // Only override iterations if the slider value is different from default
+        // Check if slider is at default value
         const defaultValue = 100000;
         const overrideOptions =
           demoIterations !== defaultValue
-            ? {
-                iterations: demoIterations,
-              }
+            ? { iterations: demoIterations }
             : null;
+
+        console.log(
+          `Login attempt for ${username}, override: ${
+            overrideOptions ? 'yes' : 'no'
+          }`
+        );
 
         const result = await passwordManager.verifyPassword(
           username,
@@ -1013,12 +1042,16 @@
 
           loginPerformance.classList.remove('hide');
 
+          // Reset form
           loginForm.reset();
           loginIterations.value = 100000;
           loginIterationsValue.textContent = '100,000';
 
-          // Update the table to show the new verification time
-          updateUserTable();
+          // Update the table with the potentially new verification time
+          // Add a small delay to ensure storage is updated first
+          setTimeout(() => {
+            updateUserTable();
+          }, 100);
         } else {
           showStatus(loginStatus, 'Invalid username or password', false);
           loginPerformance.classList.add('hide');
@@ -1035,61 +1068,66 @@
         const newPassword = document.getElementById('newPassword2').value;
 
         // Get new crypto config
-        const newOptions = {
+        const options = {
           hashFunction: changeHashFunction.value,
           saltLength: parseInt(changeSaltLength.value),
           iterations: parseInt(changeIterations.value),
           keyLength: parseInt(changeKeyLength.value),
         };
 
-        const result = await passwordManager.changePassword(
-          username,
-          currentPassword,
-          newPassword,
-          newOptions
-        );
-
-        if (result.changed) {
-          showStatus(
-            changeStatus,
-            `Password for ${username} changed successfully!`,
-            true
+        try {
+          const result = await passwordManager.changePassword(
+            username,
+            currentPassword,
+            newPassword,
+            options
           );
 
-          // Show performance comparison
-          changeTimeResult.innerHTML = `
-            <strong>Previous password:</strong> ${result.oldTime} ms<br>
-            <strong>New password:</strong> ${result.newTime} ms
-            <br><br>
-            <strong>New configuration:</strong><br>
-            • ${formatNumber(newOptions.iterations)} iterations<br>
-            • ${newOptions.hashFunction} hash function<br>
-            • ${newOptions.keyLength}-bit key length<br>
-            • ${newOptions.saltLength}-byte salt
-            <br><br>
-            <strong>Old configuration:</strong><br>
-            • ${formatNumber(result.oldConfig.iterations)} iterations<br>
-            • ${result.oldConfig.hashFunction} hash function<br>
-            • ${result.oldConfig.keyLength}-bit key length<br>
-            • ${result.oldConfig.saltLength}-byte salt
-            <br><br>
-            <em>Note: Old password will be removed from the database</em>
-          `;
-          changePerformance.classList.remove('hide');
+          if (result.changed) {
+            showStatus(
+              changeStatus,
+              `Password for ${username} changed successfully!`,
+              true
+            );
 
-          changePasswordForm.reset();
-          changeIterations.value = 100000;
-          changeIterationsValue.textContent = '100,000';
-          changeKeyLength.value = 256;
-          changeKeyLengthValue.textContent = '256';
-          updateUserTable();
-        } else {
-          showStatus(
-            changeStatus,
-            'Failed to change password. Invalid current password.',
-            false
-          );
-          changePerformance.classList.add('hide');
+            // Show performance data
+            changeTimeResult.innerHTML = `
+              Password encoding took ${result.newTime} ms with:<br>
+              • ${formatNumber(options.iterations)} iterations<br>
+              • ${options.hashFunction} hash function<br>
+              • ${options.keyLength}-bit key length<br>
+              • ${options.saltLength}-byte salt
+            `;
+
+            changeConfigResult.innerHTML = `
+              <strong>Old configuration:</strong><br>
+              • ${formatNumber(result.oldConfig.iterations)} iterations<br>
+              • ${result.oldConfig.hashFunction} hash function<br>
+              • ${result.oldConfig.keyLength}-bit key length<br>
+              • ${result.oldConfig.saltLength}-byte salt<br>
+              <strong>New configuration:</strong><br>
+              • ${formatNumber(options.iterations)} iterations<br>
+              • ${options.hashFunction} hash function<br>
+              • ${options.keyLength}-bit key length<br>
+              • ${options.saltLength}-byte salt
+            `;
+
+            changePerformance.classList.remove('hide');
+
+            // Reset form
+            changePasswordForm.reset();
+            changeIterations.value = 100000;
+            changeIterationsValue.textContent = '100,000';
+            changeKeyLength.value = 256;
+            changeKeyLengthValue.textContent = '256';
+
+            // Update the table with the new user data
+            updateUserTable();
+          } else {
+            showStatus(changeStatus, 'Failed to change password', false);
+          }
+        } catch (error) {
+          showStatus(changeStatus, error.message, false);
         }
       });
 
@@ -1100,60 +1138,26 @@
         const username = document.getElementById('deleteUsername').value;
         const password = document.getElementById('deletePassword').value;
 
-        const deleted = await passwordManager.deleteUser(username, password);
+        try {
+          const deleted = await passwordManager.deleteUser(username, password);
 
-        if (deleted) {
-          showStatus(
-            deleteStatus,
-            `User ${username} deleted successfully!`,
-            true
-          );
-          deleteUserForm.reset();
-          updateUserTable();
-        } else {
-          showStatus(
-            deleteStatus,
-            'Failed to delete user. Invalid username or password.',
-            false
-          );
-        }
-      });
-
-      // Delete user button in the table
-      userTableBody.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('delete-btn')) {
-          const username = e.target.dataset.username;
-          const password = prompt(`Enter password to delete user ${username}:`);
-
-          if (password) {
-            const deleted = await passwordManager.deleteUser(
-              username,
-              password
+          if (deleted) {
+            showStatus(
+              deleteStatus,
+              `User ${username} deleted successfully!`,
+              true
             );
-
-            if (deleted) {
-              showStatus(
-                deleteStatus,
-                `User ${username} deleted successfully!`,
-                true
-              );
-              updateUserTable();
-            } else {
-              showStatus(
-                deleteStatus,
-                'Failed to delete user. Invalid username or password.',
-                false
-              );
-            }
+            deleteUserForm.reset();
+            updateUserTable();
+          } else {
+            showStatus(deleteStatus, 'Failed to delete user', false);
           }
+        } catch (error) {
+          showStatus(deleteStatus, error.message, false);
         }
       });
 
       // Initial load of user data into the table
-      updateUserTable();
-      // Load data from localStorage on page load
-      passwordManager.loadFromStorage();
-      // Update the table to show the loaded data
       updateUserTable();
     </script>
   </body>
