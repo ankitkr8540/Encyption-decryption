@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Password Manager</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f7fa;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between;
+      }
+
+      .card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        flex: 1;
+        min-width: 300px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      input,
+      button {
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      button {
+        background-color: #3498db;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        border: none;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #3498db;
+        color: white;
+        font-weight: 500;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      .status-message {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        text-align: center;
+      }
+
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .password-info {
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: #666;
+      }
+
+      .hide {
+        display: none;
+      }
+
+      /* For mobile */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Secure Password Manager</h1>
+
+    <div class="container">
+      <div class="card">
+        <h2>Register New User</h2>
+        <div id="registerStatus" class="status-message hide"></div>
+        <form id="registerForm">
+          <input type="text" id="newUsername" placeholder="Username" required />
+          <input
+            type="password"
+            id="newPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Register</button>
+        </form>
+        <div class="password-info">
+          <p>Password will be securely stored using:</p>
+          <ul>
+            <li>Unique salt per password</li>
+            <li>PBKDF2 with SHA-256 (100,000 iterations)</li>
+            <li>256-bit derived key</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Login</h2>
+        <div id="loginStatus" class="status-message hide"></div>
+        <form id="loginForm">
+          <input type="text" id="username" placeholder="Username" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Change Password</h2>
+        <div id="changeStatus" class="status-message hide"></div>
+        <form id="changePasswordForm">
+          <input
+            type="text"
+            id="changeUsername"
+            placeholder="Username"
+            required
+          />
+          <input
+            type="password"
+            id="currentPassword"
+            placeholder="Current Password"
+            required
+          />
+          <input
+            type="password"
+            id="newPassword2"
+            placeholder="New Password"
+            required
+          />
+          <button type="submit">Change Password</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Delete User</h2>
+        <div id="deleteStatus" class="status-message hide"></div>
+        <form id="deleteUserForm">
+          <input
+            type="text"
+            id="deleteUsername"
+            placeholder="Username"
+            required
+          />
+          <input
+            type="password"
+            id="deletePassword"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" style="background-color: #e74c3c">
+            Delete User
+          </button>
+        </form>
+        <p class="password-info">
+          This action cannot be undone. User will be permanently removed.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>User Database</h2>
+      <p>
+        This table shows all registered users and their security details (for
+        demonstration purposes only)
+      </p>
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Salt (Hex)</th>
+            <th>Hash (Hex, first 16 chars)</th>
+            <th>Iterations</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody">
+          <!-- User data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      /**
+       * Secure Password Storage and Verification Tool
+       */
+      class PasswordManager {
+        constructor(iterations = 100000, keyLength = 256) {
+          this.iterations = iterations;
+          this.keyLength = keyLength;
+          this.passwordStore = new Map();
+
+          // Try to load data from localStorage
+          this.loadFromStorage();
+        }
+
+        // Storage methods
+        saveToStorage() {
+          // Convert Map to array of entries
+          const entries = Array.from(this.passwordStore.entries());
+
+          // Convert to JSON string and store
+          localStorage.setItem('passwordManager', JSON.stringify(entries));
+        }
+
+        loadFromStorage() {
+          const stored = localStorage.getItem('passwordManager');
+          if (stored) {
+            try {
+              // Parse JSON and convert back to Map
+              const entries = JSON.parse(stored);
+              this.passwordStore = new Map(entries);
+            } catch (e) {
+              console.error('Failed to load from storage:', e);
+            }
+          }
+        }
+
+        clearStorage() {
+          localStorage.removeItem('passwordManager');
+          this.passwordStore.clear();
+        }
+
+        // Core crypto methods
+        generateSalt(length = 16) {
+          const salt = new Uint8Array(length);
+          crypto.getRandomValues(salt); // crypto method are already there in the browser
+          return salt;
+        }
+
+        stringToBuffer(str) {
+          return new TextEncoder().encode(str);
+        }
+
+        bufferToHex(buffer) {
+          return Array.from(new Uint8Array(buffer))
+            .map((b) => b.toString(16).padStart(2, '0'))
+            .join('');
+        }
+
+        hexToBuffer(hexString) {
+          const bytes = new Uint8Array(hexString.length / 2);
+          for (let i = 0; i < hexString.length; i += 2) {
+            bytes[i / 2] = parseInt(hexString.substr(i, 2), 16);
+          }
+          return bytes.buffer;
+        }
+
+        async deriveKey(password, salt) {
+          const passwordBuffer = this.stringToBuffer(password);
+
+          const importedKey = await crypto.subtle.importKey(
+            'raw',
+            passwordBuffer,
+            { name: 'PBKDF2' },
+            false,
+            ['deriveBits']
+          );
+
+          return crypto.subtle.deriveBits(
+            {
+              name: 'PBKDF2',
+              salt: salt,
+              iterations: this.iterations,
+              hash: 'SHA-256',
+            },
+            importedKey,
+            this.keyLength
+          );
+        }
+
+        // User management methods
+        async storePassword(username, password) {
+          // Check if username already exists
+          if (this.passwordStore.has(username)) {
+            throw new Error('Username already exists');
+          }
+
+          const salt = this.generateSalt();
+          const derivedKey = await this.deriveKey(password, salt);
+
+          const passwordData = {
+            salt: this.bufferToHex(salt),
+            hash: this.bufferToHex(derivedKey),
+            iterations: this.iterations,
+          };
+
+          this.passwordStore.set(username, passwordData);
+          this.saveToStorage();
+
+          return passwordData;
+        }
+
+        async verifyPassword(username, password) {
+          const passwordData = this.passwordStore.get(username);
+
+          if (!passwordData) {
+            return false;
+          }
+
+          const salt = new Uint8Array(this.hexToBuffer(passwordData.salt));
+          const derivedKey = await this.deriveKey(password, salt);
+          const derivedKeyHex = this.bufferToHex(derivedKey);
+
+          return derivedKeyHex === passwordData.hash;
+        }
+
+        getUsers() {
+          return Array.from(this.passwordStore.keys());
+        }
+
+        getUserData() {
+          return Array.from(this.passwordStore.entries()).map(
+            ([username, data]) => ({
+              username,
+              ...data,
+            })
+          );
+        }
+
+        async changePassword(username, oldPassword, newPassword) {
+          const isValid = await this.verifyPassword(username, oldPassword);
+
+          if (!isValid) {
+            return false;
+          }
+
+          // Remove the old entry first to avoid the "already exists" error
+          this.passwordStore.delete(username);
+          await this.storePassword(username, newPassword);
+          return true;
+        }
+
+        async deleteUser(username, password) {
+          const isValid = await this.verifyPassword(username, password);
+
+          if (!isValid) {
+            return false;
+          }
+
+          const deleted = this.passwordStore.delete(username);
+          this.saveToStorage();
+          return deleted;
+        }
+      }
+
+      // Initialize app
+      const passwordManager = new PasswordManager();
+
+      // DOM references
+      const registerForm = document.getElementById('registerForm');
+      const loginForm = document.getElementById('loginForm');
+      const changePasswordForm = document.getElementById('changePasswordForm');
+      const userTableBody = document.getElementById('userTableBody');
+
+      // Status messages
+      const registerStatus = document.getElementById('registerStatus');
+      const loginStatus = document.getElementById('loginStatus');
+      const changeStatus = document.getElementById('changeStatus');
+
+      // Helper function to show status messages
+      function showStatus(element, message, isSuccess) {
+        element.textContent = message;
+        element.classList.remove('hide', 'success', 'error');
+        element.classList.add(isSuccess ? 'success' : 'error');
+
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+          element.classList.add('hide');
+        }, 3000);
+      }
+
+      // Update the user table
+      function updateUserTable() {
+        userTableBody.innerHTML = '';
+
+        const userData = passwordManager.getUserData();
+
+        if (userData.length === 0) {
+          const row = document.createElement('tr');
+          row.innerHTML = '<td colspan="4">No users registered yet</td>';
+          userTableBody.appendChild(row);
+          return;
+        }
+
+        userData.forEach((user) => {
+          const row = document.createElement('tr');
+
+          // Show only first 16 chars of hash for brevity
+          const truncatedHash = user.hash.substring(0, 16) + '...';
+
+          row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.salt}</td>
+                    <td>${truncatedHash}</td>
+                    <td>${user.iterations}</td>
+                    <td>
+                        <button type="button" class="delete-btn" data-username="${user.username}" 
+                            style="background-color: #e74c3c; width: auto; padding: 5px 10px;">
+                            Delete
+                        </button>
+                    </td>
+                `;
+
+          userTableBody.appendChild(row);
+        });
+      }
+
+      // Register form submission
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('newUsername').value;
+        const password = document.getElementById('newPassword').value;
+
+        try {
+          await passwordManager.storePassword(username, password);
+          showStatus(
+            registerStatus,
+            `User ${username} registered successfully!`,
+            true
+          );
+          registerForm.reset();
+          updateUserTable();
+        } catch (error) {
+          showStatus(registerStatus, error.message, false);
+        }
+      });
+
+      // Login form submission
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const isValid = await passwordManager.verifyPassword(
+          username,
+          password
+        );
+
+        if (isValid) {
+          showStatus(loginStatus, `Welcome back, ${username}!`, true);
+          loginForm.reset();
+        } else {
+          showStatus(loginStatus, 'Invalid username or password', false);
+        }
+      });
+
+      // Change password form submission
+      changePasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('changeUsername').value;
+        const currentPassword =
+          document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword2').value;
+
+        const changed = await passwordManager.changePassword(
+          username,
+          currentPassword,
+          newPassword
+        );
+
+        if (changed) {
+          showStatus(
+            changeStatus,
+            `Password for ${username} changed successfully!`,
+            true
+          );
+          changePasswordForm.reset();
+          updateUserTable();
+        } else {
+          showStatus(
+            changeStatus,
+            'Invalid username or current password',
+            false
+          );
+        }
+      });
+
+      // Delete form submission
+      const deleteUserForm = document.getElementById('deleteUserForm');
+      const deleteStatus = document.getElementById('deleteStatus');
+
+      deleteUserForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('deleteUsername').value;
+        const password = document.getElementById('deletePassword').value;
+
+        const deleted = await passwordManager.deleteUser(username, password);
+
+        if (deleted) {
+          showStatus(
+            deleteStatus,
+            `User ${username} deleted successfully!`,
+            true
+          );
+          deleteUserForm.reset();
+          updateUserTable();
+        } else {
+          showStatus(deleteStatus, 'Invalid username or password', false);
+        }
+      });
+
+      // Delete button in the table
+      userTableBody.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+          const username = e.target.getAttribute('data-username');
+
+          if (
+            confirm(
+              `Are you sure you want to delete user "${username}"?\nThis action cannot be undone.`
+            )
+          ) {
+            // Prompt for password
+            const password = prompt(
+              `Enter password for "${username}" to confirm deletion:`
+            );
+
+            if (password) {
+              const deleted = await passwordManager.deleteUser(
+                username,
+                password
+              );
+
+              if (deleted) {
+                alert(`User ${username} deleted successfully!`);
+                updateUserTable();
+              } else {
+                alert('Invalid password. Deletion canceled.');
+              }
+            }
+          }
+        }
+      });
+
+      // Initialize user table
+      updateUserTable();
+    </script>
+  </body>
+</html>
