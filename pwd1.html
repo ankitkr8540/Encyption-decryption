@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Secure Password Manager</title>
+    <title>Advanced Secure Password Manager</title>
     <style>
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,7 +14,9 @@
         padding: 20px;
         background-color: #f5f7fa;
       }
-
+      .d-flex {
+        display: flex;
+      }
       .container {
         display: flex;
         flex-wrap: wrap;
@@ -44,7 +46,8 @@
       }
 
       input,
-      button {
+      button,
+      select {
         padding: 10px;
         margin: 8px 0;
         border-radius: 4px;
@@ -53,7 +56,8 @@
         box-sizing: border-box;
       }
 
-      input:focus {
+      input:focus,
+      select:focus {
         outline: none;
         border-color: #3498db;
         box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
@@ -139,7 +143,7 @@
         }
       }
 
-      /* New styles for iterations slider */
+      /* Range slider styles */
       .range-container {
         margin: 15px 0;
       }
@@ -159,7 +163,8 @@
         flex-grow: 1;
       }
 
-      .iterations-value {
+      .iterations-value,
+      .keylength-value {
         min-width: 80px;
         text-align: center;
         font-weight: bold;
@@ -172,10 +177,45 @@
         border-radius: 4px;
         border-left: 4px solid #3498db;
       }
+
+      .crypto-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      @media (max-width: 600px) {
+        .crypto-options {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .option-group {
+        margin-bottom: 12px;
+      }
+
+      .option-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
     </style>
   </head>
   <body>
-    <h1>Secure Password Manager with Performance Tracking</h1>
+    <div class="d-flex">
+      <div style="align-content: center; margin: auto">
+        <h1>Advanced Secure Password Manager</h1>
+      </div>
+      <div style="align-content: center; margin: auto">
+        <button
+          id="clearStorageBtn"
+          style="background-color: #e74c3c; width: auto"
+        >
+          Clear All User Data
+        </button>
+      </div>
+    </div>
 
     <div class="container">
       <div class="card">
@@ -189,6 +229,26 @@
             placeholder="Password"
             required
           />
+
+          <div class="crypto-options">
+            <div class="option-group">
+              <label for="registerHashFunction">Hash Function:</label>
+              <select id="registerHashFunction">
+                <option value="SHA-256">SHA-256</option>
+                <option value="SHA-384">SHA-384</option>
+                <option value="SHA-512">SHA-512</option>
+              </select>
+            </div>
+
+            <div class="option-group">
+              <label for="registerSaltLength">Salt Length:</label>
+              <select id="registerSaltLength">
+                <option value="16">16 bytes</option>
+                <option value="24">24 bytes</option>
+                <option value="32">32 bytes</option>
+              </select>
+            </div>
+          </div>
 
           <div class="range-container">
             <label for="registerIterations">PBKDF2 Iterations:</label>
@@ -207,17 +267,36 @@
             </div>
           </div>
 
+          <div class="range-container">
+            <label for="registerKeyLength">Key Length (bits):</label>
+            <div class="slider-with-value">
+              <input
+                type="range"
+                id="registerKeyLength"
+                min="128"
+                max="512"
+                step="64"
+                value="256"
+              />
+              <span id="registerKeyLengthValue" class="keylength-value"
+                >256</span
+              >
+            </div>
+          </div>
+
           <button type="submit">Register</button>
         </form>
+
         <div class="password-info">
           <p>Password will be securely stored using:</p>
           <ul>
-            <li>Unique salt per password</li>
-            <li>PBKDF2 with SHA-256</li>
+            <li>Unique salt with configurable length</li>
+            <li>PBKDF2 with selectable hash function</li>
             <li>User-configurable iterations</li>
-            <li>256-bit derived key</li>
+            <li>Adjustable key length for stronger security</li>
           </ul>
         </div>
+
         <div id="registerPerformance" class="performance-info hide">
           <p><strong>Performance results:</strong></p>
           <p id="registerTimeResult"></p>
@@ -235,11 +314,31 @@
             placeholder="Password"
             required
           />
+
+          <div class="range-container">
+            <label for="loginIterations">PBKDF2 Iterations for Demo:</label>
+            <div class="slider-with-value">
+              <input
+                type="range"
+                id="loginIterations"
+                min="10000"
+                max="500000"
+                step="10000"
+                value="100000"
+              />
+              <span id="loginIterationsValue" class="iterations-value"
+                >100,000</span
+              >
+            </div>
+          </div>
+
           <button type="submit">Login</button>
         </form>
+
         <div id="loginPerformance" class="performance-info hide">
           <p><strong>Performance results:</strong></p>
           <p id="loginTimeResult"></p>
+          <p id="loginConfigResult"></p>
         </div>
       </div>
 
@@ -266,6 +365,26 @@
             required
           />
 
+          <div class="crypto-options">
+            <div class="option-group">
+              <label for="changeHashFunction">New Hash Function:</label>
+              <select id="changeHashFunction">
+                <option value="SHA-256">SHA-256</option>
+                <option value="SHA-384">SHA-384</option>
+                <option value="SHA-512">SHA-512</option>
+              </select>
+            </div>
+
+            <div class="option-group">
+              <label for="changeSaltLength">New Salt Length:</label>
+              <select id="changeSaltLength">
+                <option value="16">16 bytes</option>
+                <option value="24">24 bytes</option>
+                <option value="32">32 bytes</option>
+              </select>
+            </div>
+          </div>
+
           <div class="range-container">
             <label for="changeIterations">New PBKDF2 Iterations:</label>
             <div class="slider-with-value">
@@ -283,11 +402,28 @@
             </div>
           </div>
 
+          <div class="range-container">
+            <label for="changeKeyLength">New Key Length (bits):</label>
+            <div class="slider-with-value">
+              <input
+                type="range"
+                id="changeKeyLength"
+                min="128"
+                max="512"
+                step="64"
+                value="256"
+              />
+              <span id="changeKeyLengthValue" class="keylength-value">256</span>
+            </div>
+          </div>
+
           <button type="submit">Change Password</button>
         </form>
+
         <div id="changePerformance" class="performance-info hide">
           <p><strong>Performance results:</strong></p>
           <p id="changeTimeResult"></p>
+          <p id="changeConfigResult"></p>
         </div>
       </div>
 
@@ -321,16 +457,20 @@
       <h2>User Database</h2>
       <p>
         This table shows all registered users and their security details
-        including performance metrics
+        including performance metrics and crypto configuration
       </p>
       <table id="userTable">
         <thead>
           <tr>
             <th>Username</th>
+            <th>Hash Function</th>
             <th>Salt (Hex)</th>
+            <th>Salt Len</th>
             <th>Hash (Hex, first 16 chars)</th>
             <th>Iterations</th>
+            <th>Key Length</th>
             <th>Encoding Time (ms)</th>
+            <th>Decode Time (ms)</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -342,12 +482,25 @@
 
     <script>
       /**
-       * Secure Password Storage and Verification Tool with Performance Tracking
+       * Advanced Secure Password Storage and Verification Tool with Performance Tracking
+       * Features:
+       * - Configurable hash functions (SHA-256, SHA-384, SHA-512)
+       * - Adjustable key length (128 to 512 bits)
+       * - Configurable salt length (16, 24, 32 bytes)
+       * - Adjustable PBKDF2 iterations
+       * - Performance tracking and comparison
        */
       class PasswordManager {
-        constructor(defaultIterations = 100000, keyLength = 256) {
-          this.defaultIterations = defaultIterations;
-          this.keyLength = keyLength;
+        constructor(defaultOptions = {}) {
+          // Default options
+          this.defaultOptions = {
+            iterations: 100000,
+            keyLength: 256,
+            hashFunction: 'SHA-256',
+            saltLength: 16,
+            ...defaultOptions,
+          };
+
           this.passwordStore = new Map();
 
           // Try to load data from localStorage
@@ -370,6 +523,7 @@
               // Parse JSON and convert back to Map
               const entries = JSON.parse(stored);
               this.passwordStore = new Map(entries);
+              console.log('Loaded from storage:', this.passwordStore);
             } catch (e) {
               console.error('Failed to load from storage:', e);
             }
@@ -382,7 +536,7 @@
         }
 
         // Core crypto methods
-        generateSalt(length = 16) {
+        generateSalt(length = this.defaultOptions.saltLength) {
           const salt = new Uint8Array(length);
           crypto.getRandomValues(salt);
           return salt;
@@ -406,7 +560,13 @@
           return bytes.buffer;
         }
 
-        async deriveKey(password, salt, iterations = this.defaultIterations) {
+        async deriveKey(password, salt, options = {}) {
+          // Merge with default options
+          const config = {
+            ...this.defaultOptions,
+            ...options,
+          };
+
           const passwordBuffer = this.stringToBuffer(password);
 
           const importedKey = await crypto.subtle.importKey(
@@ -421,37 +581,42 @@
             {
               name: 'PBKDF2',
               salt: salt,
-              iterations: iterations,
-              hash: 'SHA-256',
+              iterations: config.iterations,
+              hash: config.hashFunction,
             },
             importedKey,
-            this.keyLength
+            config.keyLength
           );
         }
 
         // User management methods with performance tracking
-        async storePassword(
-          username,
-          password,
-          iterations = this.defaultIterations
-        ) {
+        async storePassword(username, password, options = {}) {
           // Check if username already exists
           if (this.passwordStore.has(username)) {
             throw new Error('Username already exists');
           }
 
-          const salt = this.generateSalt();
+          // Merge with default options
+          const config = {
+            ...this.defaultOptions,
+            ...options,
+          };
+
+          const salt = this.generateSalt(config.saltLength);
 
           // Start time measurement
           const startTime = performance.now();
-          const derivedKey = await this.deriveKey(password, salt, iterations);
+          const derivedKey = await this.deriveKey(password, salt, config);
           const endTime = performance.now();
           const timeTaken = endTime - startTime;
 
           const passwordData = {
             salt: this.bufferToHex(salt),
             hash: this.bufferToHex(derivedKey),
-            iterations: iterations,
+            iterations: config.iterations,
+            keyLength: config.keyLength,
+            hashFunction: config.hashFunction,
+            saltLength: config.saltLength,
             timeTaken: timeTaken.toFixed(2),
           };
 
@@ -461,7 +626,7 @@
           return { ...passwordData, timeTaken };
         }
 
-        async verifyPassword(username, password) {
+        async verifyPassword(username, password, overrideOptions = null) {
           const passwordData = this.passwordStore.get(username);
 
           if (!passwordData) {
@@ -470,13 +635,25 @@
 
           const salt = new Uint8Array(this.hexToBuffer(passwordData.salt));
 
+          // If we have override options, use them, otherwise use stored configuration
+          const config = overrideOptions
+            ? {
+                iterations:
+                  overrideOptions.iterations || passwordData.iterations,
+                hashFunction: passwordData.hashFunction,
+                keyLength: passwordData.keyLength,
+                saltLength: passwordData.saltLength,
+              }
+            : {
+                iterations: passwordData.iterations,
+                hashFunction: passwordData.hashFunction,
+                keyLength: passwordData.keyLength,
+                saltLength: passwordData.saltLength,
+              };
+
           // Start time measurement
           const startTime = performance.now();
-          const derivedKey = await this.deriveKey(
-            password,
-            salt,
-            passwordData.iterations
-          );
+          const derivedKey = await this.deriveKey(password, salt, config);
           const endTime = performance.now();
           const timeTaken = endTime - startTime;
 
@@ -486,7 +663,9 @@
           return {
             isValid,
             timeTaken: timeTaken.toFixed(2),
-            iterations: passwordData.iterations,
+            originalConfig: { ...passwordData },
+            usedConfig: config,
+            usingCustomConfig: overrideOptions !== null,
           };
         }
 
@@ -507,7 +686,7 @@
           username,
           oldPassword,
           newPassword,
-          newIterations
+          newOptions = {}
         ) {
           const verificationResult = await this.verifyPassword(
             username,
@@ -519,18 +698,20 @@
           }
 
           // Remove the old entry first to avoid the "already exists" error
+          const oldConfig = this.passwordStore.get(username);
           this.passwordStore.delete(username);
+
           const storeResult = await this.storePassword(
             username,
             newPassword,
-            newIterations
+            newOptions
           );
 
           return {
             changed: true,
-            oldIterations: verificationResult.iterations,
+            oldConfig,
             oldTime: verificationResult.timeTaken,
-            newIterations: newIterations,
+            newConfig: newOptions,
             newTime: storeResult.timeTaken,
           };
         }
@@ -553,6 +734,7 @@
 
       // Initialize app
       const passwordManager = new PasswordManager();
+      const clearStorageBtn = document.getElementById('clearStorageBtn');
 
       // DOM references
       const registerForm = document.getElementById('registerForm');
@@ -572,17 +754,41 @@
       const registerTimeResult = document.getElementById('registerTimeResult');
       const loginPerformance = document.getElementById('loginPerformance');
       const loginTimeResult = document.getElementById('loginTimeResult');
+      const loginConfigResult = document.getElementById('loginConfigResult');
       const changePerformance = document.getElementById('changePerformance');
       const changeTimeResult = document.getElementById('changeTimeResult');
+      const changeConfigResult = document.getElementById('changeConfigResult');
 
-      // Iterations slider elements
+      // Register form inputs
+      const registerHashFunction = document.getElementById(
+        'registerHashFunction'
+      );
+      const registerSaltLength = document.getElementById('registerSaltLength');
       const registerIterations = document.getElementById('registerIterations');
       const registerIterationsValue = document.getElementById(
         'registerIterationsValue'
       );
+      const registerKeyLength = document.getElementById('registerKeyLength');
+      const registerKeyLengthValue = document.getElementById(
+        'registerKeyLengthValue'
+      );
+
+      // Login form inputs
+      const loginIterations = document.getElementById('loginIterations');
+      const loginIterationsValue = document.getElementById(
+        'loginIterationsValue'
+      );
+
+      // Change password form inputs
+      const changeHashFunction = document.getElementById('changeHashFunction');
+      const changeSaltLength = document.getElementById('changeSaltLength');
       const changeIterations = document.getElementById('changeIterations');
       const changeIterationsValue = document.getElementById(
         'changeIterationsValue'
+      );
+      const changeKeyLength = document.getElementById('changeKeyLength');
+      const changeKeyLengthValue = document.getElementById(
+        'changeKeyLengthValue'
       );
 
       // Helper function to show status messages
@@ -597,18 +803,39 @@
         }, 3000);
       }
 
-      // Format iteration numbers with commas
+      // Clear storage button
+      clearStorageBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all user data?')) {
+          passwordManager.clearStorage();
+          updateUserTable();
+          alert('All user data cleared!');
+        }
+      });
+
+      // Format numbers with commas
       function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
 
-      // Update iterations display on slider change
+      // Update slider displays on change
       registerIterations.addEventListener('input', function () {
         registerIterationsValue.textContent = formatNumber(this.value);
       });
 
+      registerKeyLength.addEventListener('input', function () {
+        registerKeyLengthValue.textContent = this.value;
+      });
+
+      loginIterations.addEventListener('input', function () {
+        loginIterationsValue.textContent = formatNumber(this.value);
+      });
+
       changeIterations.addEventListener('input', function () {
         changeIterationsValue.textContent = formatNumber(this.value);
+      });
+
+      changeKeyLength.addEventListener('input', function () {
+        changeKeyLengthValue.textContent = this.value;
       });
 
       // Update the user table
@@ -619,7 +846,7 @@
 
         if (userData.length === 0) {
           const row = document.createElement('tr');
-          row.innerHTML = '<td colspan="6">No users registered yet</td>';
+          row.innerHTML = '<td colspan="8">No users registered yet</td>';
           userTableBody.appendChild(row);
           return;
         }
@@ -630,12 +857,19 @@
           // Show only first 16 chars of hash for brevity
           const truncatedHash = user.hash.substring(0, 16) + '...';
 
+          // Show only first part of salt for brevity
+          const truncatedSalt = user.salt.substring(0, 16) + '...';
+
           row.innerHTML = `
             <td>${user.username}</td>
-            <td>${user.salt}</td>
-            <td>${truncatedHash}</td>
+            <td>${user.hashFunction}</td>
+            <td title="${user.salt}">${truncatedSalt}</td>
+            <td>${user.saltLength} bytes</td>
+            <td title="${user.hash}">${truncatedHash}</td>
             <td>${formatNumber(user.iterations)}</td>
+            <td>${user.keyLength} bits</td>
             <td>${user.timeTaken} ms</td>
+            
             <td>
                 <button type="button" class="delete-btn" data-username="${
                   user.username
@@ -656,13 +890,20 @@
 
         const username = document.getElementById('newUsername').value;
         const password = document.getElementById('newPassword').value;
-        const iterations = parseInt(registerIterations.value);
+
+        // Get crypto config
+        const options = {
+          hashFunction: registerHashFunction.value,
+          saltLength: parseInt(registerSaltLength.value),
+          iterations: parseInt(registerIterations.value),
+          keyLength: parseInt(registerKeyLength.value),
+        };
 
         try {
           const result = await passwordManager.storePassword(
             username,
             password,
-            iterations
+            options
           );
           showStatus(
             registerStatus,
@@ -671,14 +912,20 @@
           );
 
           // Show performance data
-          registerTimeResult.textContent = `Password encoding took ${
-            result.timeTaken
-          } ms with ${formatNumber(iterations)} iterations.`;
+          registerTimeResult.innerHTML = `
+            Password encoding took ${result.timeTaken} ms with:<br>
+            • ${formatNumber(options.iterations)} iterations<br>
+            • ${options.hashFunction} hash function<br>
+            • ${options.keyLength}-bit key length<br>
+            • ${options.saltLength}-byte salt
+          `;
           registerPerformance.classList.remove('hide');
 
           registerForm.reset();
           registerIterations.value = 100000;
           registerIterationsValue.textContent = '100,000';
+          registerKeyLength.value = 256;
+          registerKeyLengthValue.textContent = '256';
           updateUserTable();
         } catch (error) {
           showStatus(registerStatus, error.message, false);
@@ -691,19 +938,53 @@
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+        const demoIterations = parseInt(loginIterations.value);
 
-        const result = await passwordManager.verifyPassword(username, password);
+        const overrideOptions = {
+          iterations: demoIterations,
+        };
+
+        const result = await passwordManager.verifyPassword(
+          username,
+          password,
+          overrideOptions
+        );
 
         if (result.isValid) {
           showStatus(loginStatus, `Welcome back, ${username}!`, true);
 
           // Show performance data
-          loginTimeResult.textContent = `Password verification took ${
-            result.timeTaken
-          } ms with ${formatNumber(result.iterations)} iterations.`;
+          loginTimeResult.textContent = `Password verification took ${result.timeTaken} ms`;
+
+          // Show config details
+          if (result.usingCustomConfig) {
+            loginConfigResult.innerHTML = `
+              <strong>Using demo configuration:</strong><br>
+              • ${formatNumber(
+                overrideOptions.iterations
+              )} iterations (demo)<br>
+              • ${result.originalConfig.hashFunction} hash function<br>
+              • ${result.originalConfig.keyLength}-bit key length<br>
+              • ${result.originalConfig.saltLength}-byte salt<br>
+              <em>Note: Stored password uses ${formatNumber(
+                result.originalConfig.iterations
+              )} iterations</em>
+            `;
+          } else {
+            loginConfigResult.innerHTML = `
+              <strong>Using stored configuration:</strong><br>
+              • ${formatNumber(result.originalConfig.iterations)} iterations<br>
+              • ${result.originalConfig.hashFunction} hash function<br>
+              • ${result.originalConfig.keyLength}-bit key length<br>
+              • ${result.originalConfig.saltLength}-byte salt
+            `;
+          }
+
           loginPerformance.classList.remove('hide');
 
           loginForm.reset();
+          loginIterations.value = 100000;
+          loginIterationsValue.textContent = '100,000';
         } else {
           showStatus(loginStatus, 'Invalid username or password', false);
           loginPerformance.classList.add('hide');
@@ -718,13 +999,20 @@
         const currentPassword =
           document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword2').value;
-        const newIterations = parseInt(changeIterations.value);
+
+        // Get new crypto config
+        const newOptions = {
+          hashFunction: changeHashFunction.value,
+          saltLength: parseInt(changeSaltLength.value),
+          iterations: parseInt(changeIterations.value),
+          keyLength: parseInt(changeKeyLength.value),
+        };
 
         const result = await passwordManager.changePassword(
           username,
           currentPassword,
           newPassword,
-          newIterations
+          newOptions
         );
 
         if (result.changed) {
@@ -736,18 +1024,31 @@
 
           // Show performance comparison
           changeTimeResult.innerHTML = `
-            <strong>Previous password:</strong> ${
-              result.oldTime
-            } ms with ${formatNumber(result.oldIterations)} iterations<br>
-            <strong>New password:</strong> ${
-              result.newTime
-            } ms with ${formatNumber(result.newIterations)} iterations
+            <strong>Previous password:</strong> ${result.oldTime} ms<br>
+            <strong>New password:</strong> ${result.newTime} ms
           `;
+
+          // Show config comparison
+          changeConfigResult.innerHTML = `
+            <strong>Previous configuration:</strong><br>
+            • ${formatNumber(result.oldConfig.iterations)} iterations<br>
+            • ${result.oldConfig.hashFunction} hash function<br>
+            • ${result.oldConfig.keyLength}-bit key length<br>
+            • ${result.oldConfig.saltLength}-byte salt<br><br>
+            <strong>New configuration:</strong><br>
+            • ${formatNumber(newOptions.iterations)} iterations<br>
+            • ${newOptions.hashFunction} hash function<br>
+            • ${newOptions.keyLength}-bit key length<br>
+            • ${newOptions.saltLength}-byte salt
+          `;
+
           changePerformance.classList.remove('hide');
 
           changePasswordForm.reset();
           changeIterations.value = 100000;
           changeIterationsValue.textContent = '100,000';
+          changeKeyLength.value = 256;
+          changeKeyLengthValue.textContent = '256';
           updateUserTable();
         } else {
           showStatus(
@@ -759,64 +1060,33 @@
         }
       });
 
-      // Delete form submission
-      const deleteUserForm = document.getElementById('deleteUserForm');
-      const deleteStatus = document.getElementById('deleteStatus');
-
-      deleteUserForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const username = document.getElementById('deleteUsername').value;
-        const password = document.getElementById('deletePassword').value;
-
-        const deleted = await passwordManager.deleteUser(username, password);
-
-        if (deleted) {
-          showStatus(
-            deleteStatus,
-            `User ${username} deleted successfully!`,
-            true
-          );
-          deleteUserForm.reset();
-          updateUserTable();
-        } else {
-          showStatus(deleteStatus, 'Invalid username or password', false);
-        }
-      });
-
-      // Delete button in the table
+      // Delete user button click event
       userTableBody.addEventListener('click', async (e) => {
         if (e.target.classList.contains('delete-btn')) {
-          const username = e.target.getAttribute('data-username');
+          const username = e.target.dataset.username;
+          const password = prompt(`Enter password to delete user ${username}:`);
 
-          if (
-            confirm(
-              `Are you sure you want to delete user "${username}"?\nThis action cannot be undone.`
-            )
-          ) {
-            // Prompt for password
-            const password = prompt(
-              `Enter password for "${username}" to confirm deletion:`
+          if (password) {
+            const deleted = await passwordManager.deleteUser(
+              username,
+              password
             );
 
-            if (password) {
-              const deleted = await passwordManager.deleteUser(
-                username,
-                password
+            if (deleted) {
+              showStatus(
+                deleteStatus,
+                `User ${username} deleted successfully!`,
+                true
               );
-
-              if (deleted) {
-                alert(`User ${username} deleted successfully!`);
-                updateUserTable();
-              } else {
-                alert('Invalid password. Deletion canceled.');
-              }
+              updateUserTable();
+            } else {
+              showStatus(deleteStatus, 'Invalid username or password', false);
             }
           }
         }
       });
 
-      // Initialize user table
+      // Initial load of user data
       updateUserTable();
     </script>
   </body>
