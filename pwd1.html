@@ -206,7 +206,7 @@
     </style>
   </head>
   <body>
-    <div class="d-flex container">
+    <div class="d-flex">
       <div style="align-content: center; margin: auto">
         <h1>Advanced Secure Password Manager</h1>
       </div>
@@ -473,7 +473,6 @@
             <th>Iterations</th>
             <th>Key Length</th>
             <th>Encoding Time (ms)</th>
-            <th>Decode Time (ms)</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -895,7 +894,6 @@
             <td>${formatNumber(user.iterations)}</td>
             <td>${user.keyLength} bits</td>
             <td>${user.timeTaken} ms</td>
-            <td>${verificationTime}</td>
             <td>
                 <button type="button" class="delete-btn" data-username="${
                   user.username
