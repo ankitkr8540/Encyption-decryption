@@ -539,15 +539,22 @@
 
         // Core crypto methods
         generateSalt(length = this.defaultOptions.saltLength) {
-          const salt = new Uint8Array(length);
+          // Generate a random salt of the specified length
+          // using the Web Crypto API
+          const salt = new Uint8Array(length); // this will be a Uint8Array of the specified length
+          // the unit8array is a typed array that represents an array of 8-bit unsigned integers
+          // for example, if length is 16, the salt will be a Uint8Array of 16 bytes
           crypto.getRandomValues(salt);
+          // The getRandomValues method fills the passed typed array with cryptographically secure random values
           return salt;
         }
 
         stringToBuffer(str) {
-          return new TextEncoder().encode(str);
+          return new TextEncoder().encode(str); // Convert string to Uint8Array
         }
 
+        // Convert buffer to hex string by mapping each byte to hex
+        // and joining them together
         bufferToHex(buffer) {
           return Array.from(new Uint8Array(buffer))
             .map((b) => b.toString(16).padStart(2, '0'))
@@ -555,15 +562,18 @@
         }
 
         hexToBuffer(hexString) {
-          const bytes = new Uint8Array(hexString.length / 2);
+          const bytes = new Uint8Array(hexString.length / 2); // Create a Uint8Array of half the length of the hex string because each byte is represented by 2 hex characters
           for (let i = 0; i < hexString.length; i += 2) {
-            bytes[i / 2] = parseInt(hexString.substr(i, 2), 16);
+            // Iterate over the hex string in steps of 2 because each byte is represented by 2 hex characters
+            bytes[i / 2] = parseInt(hexString.substr(i, 2), 16); // Convert each pair of hex characters to a byte and store it in the Uint8Array we created earlier bytes array which was half the length of the hex string and that's why we divide i by 2 to get the index of the byte in the bytes array
           }
           return bytes.buffer;
         }
 
+        // Derive key using PBKDF2
         async deriveKey(password, salt, options = {}) {
-          // Merge with default options
+          // Merge with default options we gave in the constructor
+          // The options parameter is optional and can be used to override the default options
           const config = {
             ...this.defaultOptions,
             ...options,
@@ -571,23 +581,46 @@
 
           const passwordBuffer = this.stringToBuffer(password);
 
-          const importedKey = await crypto.subtle.importKey(
-            'raw',
-            passwordBuffer,
-            { name: 'PBKDF2' },
-            false,
-            ['deriveBits']
-          );
+          // Import the password as a raw key
+          // This is necessary for PBKDF2 to work
+          // The key will be used to derive the bits
+          // using the PBKDF2 algorithm
+          // The key will not be extractable, as we don't need it
+          // after deriving the bits
+          // The key will be used for deriving bits only
+          // The key will be used for PBKDF2 only
+          //False: means that the key cannot be exported or retrieved from the browser's cryptographic storage once it has been imported. also means cannot fetch using exportKey method
 
+          const importedKey = await crypto.subtle.importKey(
+            'raw', // Import the password as a raw key which is a Uint8Array
+            passwordBuffer, // The password is a Uint8Array, so we can use it directly
+            { name: 'PBKDF2' }, // The algorithm to use for importing the key
+            false, // The key is not extractable, as we don't need it after deriving the bits
+            ['deriveBits'] // The key will be used for deriving bits only which means we can use it for PBKDF2
+          );
+          //3.5 PBKDF2 Internal Mechanism
+
+          // Initialization: Setup with password, salt, iterations, hash function
+          // Core Algorithm: Derived key = T₁ || T₂ || ... || Tₙ (where || is concatenation and n = ceil(KeyLength / HashLength))
+          // Block Calculation: Each block Tᵢ = F(Password, Salt, Iterations, i)
+          // F Function: F(P, S, c, i) = U₁ ⊕ U₂ ⊕ ... ⊕ Uᶜ (where ⊕ is XOR) and c is the number of iterations
+          // U Values:
+          // HMAC meanss Hash-based Message Authentication Code : a specific construction for creating a MAC (Message Authentication Code) based on a cryptographic hash function.
+          // U₁ = HMAC(Password, Salt || i)
+          // U₂ = HMAC(Password, U₁)
+          // U₃ = HMAC(Password, U₂)
+          // And so on...
+
+          // Final Key: DK = T₁ || T₂ || ... || Tₙ (where n = ceil(KeyLength / HashLength))
           return crypto.subtle.deriveBits(
             {
-              name: 'PBKDF2',
-              salt: salt,
-              iterations: config.iterations,
-              hash: config.hashFunction,
+              name: 'PBKDF2', // The algorithm to use for deriving the bits
+              salt: salt, // The salt is a Uint8Array, so we can use it directly
+              iterations: config.iterations, // The number of iterations to use for PBKDF2
+              hash: config.hashFunction, // The hash function to use for PBKDF2
             },
-            importedKey,
-            config.keyLength
+            importedKey, // The key to use for deriving the bits
+            config.keyLength // 8, // The length of the derived key in bits (256 bits = 32 bytes)
           );
         }
 
@@ -613,14 +646,14 @@
           const timeTaken = endTime - startTime;
 
           const passwordData = {
-            salt: this.bufferToHex(salt),
-            hash: this.bufferToHex(derivedKey),
+            salt: this.bufferToHex(salt), // Store salt as hex string
+            hash: this.bufferToHex(derivedKey), // Store derived key as hex string which is the hash and we got it from the deriveKey method
             iterations: config.iterations,
-            keyLength: config.keyLength,
+            keyLength: config.keyLength, // Store key length in bits showing the length of the derived key in bits
             hashFunction: config.hashFunction,
             saltLength: config.saltLength,
             timeTaken: timeTaken.toFixed(2),
-            verificationTime: 'N/A', // Initialize with N/A for decode time
+            // verificationTime: 'N/A', // Initialize with N/A for decode time
           };
 
           this.passwordStore.set(username, passwordData);
@@ -656,6 +689,7 @@
 
           // Start time measurement
           const startTime = performance.now();
+          // we will use the deriveKey method to derive the key from the password and salt using the PBKDF2 algorithm
           const derivedKey = await this.deriveKey(password, salt, config);
           const endTime = performance.now();
           const timeTaken = endTime - startTime;
@@ -667,6 +701,7 @@
           // with the original configuration (not demo mode)
           if (isValid && !overrideOptions) {
             // Update the user data with the new verification time
+            // this we will be showing below the login form
             passwordData.verificationTime = timeTaken.toFixed(2);
             // Store back in the map
             this.passwordStore.set(username, passwordData);
@@ -878,12 +913,14 @@
 
           // Show only first 16 chars of hash for brevity
           const truncatedHash = user.hash.substring(0, 16) + '...';
+          // const truncatedHash = user.hash;
 
           // Show only first part of salt for brevity
           const truncatedSalt = user.salt.substring(0, 16) + '...';
+          // const truncatedSalt = user.salt;
 
           // Make sure verification time is properly displayed
-          const verificationTime = user.verificationTime || 'N/A';
+          // const verificationTime = user.verificationTime || 'N/A';
 
           row.innerHTML = `
             <td>${user.username}</td>
@@ -935,7 +972,7 @@
             true
           );
 
-          // Show performance data
+          // Show performance data below the register form
           registerTimeResult.innerHTML = `
             Password encoding took ${result.timeTaken} ms with:<br>
             • ${formatNumber(options.iterations)} iterations<br>
