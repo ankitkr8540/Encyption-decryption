@@ -233,20 +233,38 @@ To ensure consistency and eliminate potential confounding variables, all tests u
 Performance measurements were captured using high-precision timing mechanisms, recording the duration of both key derivation and verification operations. This approach provided quantitative data on the computational cost associated with each security parameter, enabling evidence-based decisions about security-performance tradeoffs.
 
 \subsection{Comparison of Hashing Algorithms}
-Our analysis of hashing algorithms revealed significant performance differences between the SHA-256, SHA-384, and SHA-512 implementations. The experimental results demonstrated that SHA-256 consistently performed as the fastest algorithm, completing operations in 9.2ms total under baseline test conditions.
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{images/key_observations.png}
+\caption{Key Observations of Hashing Algorithms}
+\label{hashing_Observations}
+\end{figure}
+Our analysis of hashing algorithms Figure \ref{hashing_Observations} revealed significant performance differences between the SHA-256, SHA-384, and SHA-512 implementations. The experimental results demonstrated that SHA-256 consistently performed as the fastest algorithm, completing operations in 9.2ms total under baseline test conditions.
 
 The SHA-384 algorithm showed moderate performance degradation compared to SHA-256, while SHA-512 exhibited the most substantial performance impact, operating approximately twice as slowly as SHA-256. This performance differential is particularly notable because it reveals a non-linear relationship between hash output size and computational cost.
 
 These findings have important implications for security configuration decisions. While stronger hashing algorithms provide increased theoretical security through larger output sizes and potentially stronger resistance to cryptanalysis, they incur measurable performance penalties. The choice between hashing algorithms represents a direct security-performance tradeoff, with SHA-512 offering enhanced security at approximately double the computational cost of SHA-256.
 \subsection{Salt Length Analysis}
-Our investigation into salt length variations yielded unexpected results regarding performance impact. Contrary to potential assumptions that longer salt values would significantly increase processing time, our experimental data revealed that increasing salt length from 16 bytes to 32 bytes produced only minimal performance differences.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=1\linewidth]{images/affect_of_iterations.png}
+\caption{Impact of Salt Length on Performance}
+\label{salt_length}
+\end{figure}
+Our investigation into salt length in Figure \ref{salt_length} variations yielded unexpected results regarding performance impact. Contrary to potential assumptions that longer salt values would significantly increase processing time, our experimental data revealed that increasing salt length from 16 bytes to 32 bytes produced only minimal performance differences.
 
 The 24-byte salt configuration demonstrated the best overall performance in our tests, though the differences between all three salt lengths tested were minimal enough to be considered negligible from a user experience perspective. This finding is particularly valuable from a security optimization standpoint, as it suggests that implementing longer salt values—which provide enhanced protection against certain attack vectors—incurs minimal additional computational cost.
 
 The practical implication of this finding is that salt length can be maximized for security purposes without significant performance penalties. Given that longer salts provide stronger protection against rainbow table attacks and multiple-user targeting without measurable impact on system responsiveness, the optimal approach in most scenarios would be to implement the maximum practical salt length.
 
 \subsection{Impact of Iterations and Key Length}
-Our experimental results confirmed that iteration count represents the most significant factor affecting processing time among all parameters tested. The relationship between iteration count and processing time demonstrated an approximately linear correlation, with higher iteration counts producing proportionally longer processing times.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=1\linewidth]{images/affect_of_iterations.png}
+\caption{Impact of Iteration Count on Performance}
+\label{iterations}
+\end{figure}
+Our experimental results in Figure \ref{iterations} confirmed that iteration count represents the most significant factor affecting processing time among all parameters tested. The relationship between iteration count and processing time demonstrated an approximately linear correlation, with higher iteration counts producing proportionally longer processing times.
 
 When comparing the baseline configuration (10,000 iterations) with the high-security configuration (500,000 iterations), we observed an increase in processing time by a factor of approximately 15-16x. This substantial difference highlights the direct relationship between iteration count and computational cost, which forms the fundamental security mechanism of PBKDF2 by impeding brute-force attacks.
 
@@ -254,7 +272,13 @@ Key length variations (128-bit vs 512-bit) showed a measurable but less dramatic
 
 The high-security configuration, combining 500,000 iterations with a 512-bit key length, created a substantial delay that enhances resistance to brute force attacks while remaining below the 300ms threshold typically associated with noticeable user experience degradation. This configuration represents a strategic security choice for high-value applications where maximum protection justifies the additional processing time.
 \subsection{Performance Summary}
-To facilitate comprehensive understanding of the performance implications across different security configurations, we conducted a visual comparison of processing times. The results demonstrated a clear progression of computational cost across the tested parameters, with the baseline SHA-256 configuration (9.2ms) serving as the reference point.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=1\linewidth]{images/visual_comparison.png}
+\caption{Performance Summary of Security Configurations}
+\label{performance_summary}
+\end{figure}
+To facilitate comprehensive understanding of the performance implications across different security configurations, we conducted a visual comparison of processing times shown in Figure \ref{performance_summary}. The results demonstrated a clear progression of computational cost across the tested parameters, with the baseline SHA-256 configuration (9.2ms) serving as the reference point.
 
 SHA-384 (16.7ms) and SHA-512 (18.1ms) showed moderate increases in processing time, offering progressively stronger security at manageable time costs. The most significant performance impact was observed in the high-security configuration combining 500,000 iterations with a 512-bit key, which required 144.2ms—approximately 16 times slower than the baseline SHA-256 option.
 
