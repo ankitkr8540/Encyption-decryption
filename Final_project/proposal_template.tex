@@ -172,6 +172,13 @@ Together, these five architectural components form a comprehensive system that d
 This section provides a detailed examination of the implementation aspects of the Secure Password Manager, focusing on the cryptographic techniques employed, the deliberate performance constraints introduced for security purposes, and the integration with standardized cryptographic APIs. The implementation represents a practical application of theoretical security principles within the constraints of a web-based environment.
 \subsection{Core Cryptographic Implementation}
 The cryptographic foundation of the Secure Password Manager centers on the PBKDF2 algorithm with several configurable parameters that allow for security customization. The implementation leverages the Web Crypto API with SHA-256 as the default hash function, producing 256-bit keys with a configurable iteration count defaulting to 100,000 iterations. In figure \ref{Algorithms}, the importedKey and deriveBits functions of the Web Crypto API are illustrated, showcasing the key importation and derivation process.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\linewidth]{images/Algo1.jpg}
+  \includegraphics[width= 1\linewidth]{images/Algo2.jpg}
+  \caption{ImportedKey and deriveBits functions of Web Crypto API}
+  \label{Algorithms}
+\end{figure}
 
 
 The security design incorporates several critical features to ensure comprehensive protection. For each password, the system generates a unique random salt using cryptographically secure random number generation.(The implementation of the Salt code can be seen in Figure \ref{Salt}) The implementation supports an iteration count range from 10,000 to 500,000, providing flexibility in security-performance balance. The data flow begins with password string conversion via TextEncoder to create a buffer, followed by key importation and subsequent derivation of bits using the specified salt and iteration count.
@@ -180,13 +187,7 @@ The security design incorporates several critical features to ensure comprehensi
 The system adheres to best security practices by never storing the original passwords, instead maintaining only the derived key and salt information. This approach ensures that even in the event of a system compromise, the original credentials remain protected. The verification process implements constant-time comparison to prevent timing attacks that might otherwise reveal information about password validity.
 
 The implementation carefully considers the security-performance tradeoff, using high-precision timestamps to track the computational cost of different security configurations. These measurements provide transparency about the impact of security decisions and allow users to make informed choices based on their specific requirements and constraints.
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1\linewidth]{images/Algo1.jpg}
-  \includegraphics[width= 1\linewidth]{images/Algo2.jpg}
-  \caption{ImportedKey and deriveBits functions of Web Crypto API}
-  \label{Algorithms}
-\end{figure}
+
 
 \subsection{Slow Hashing Implementation}
 The Password-Based Key Derivation Function 2 (PBKDF2) serves as the central slow hashing mechanism in this implementation. Unlike traditional hash functions designed for computational efficiency, PBKDF2 purposefully increases the computational cost of password hashing, creating a significant barrier against brute-force and dictionary attacks.
