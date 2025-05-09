@@ -47,7 +47,7 @@
 \maketitle
 \section{Abstract}
 This report presents a secure password management system that implements modern cryptographic techniques to address the critical balance between security and performance. Our solution utilizes the Password-Based Key Derivation Function 2 (PBKDF2) with configurable iterations, supporting multiple hash function options (SHA-256, SHA-384, SHA-512) and adjustable key lengths (128-512 bits). The system features a web-based interface with local storage and includes performance tracking capabilities that provide transparency about security-performance tradeoffs.
-With data breaches exposing over 15 billion records in 2023 alone and password theft involved in 81\% of hacking-related breaches, the need for robust password security has never been more critical. Our approach provides an adaptive security model that allows users to configure security parameters according to their specific requirements while maintaining visibility into the performance implications of their choices. Through extensive testing of various security configurations, we demonstrate how different parameters affect processing time and provide recommendations for both standard web applications and high-security environments. The system architecture comprises five key components: User Interface Layer, Password Manager Core, Cryptographic Module, Storage Layer, and Performance Tracking System, all working together to deliver a comprehensive password security solution.
+With data breaches exposing billions of records and rampant password theft, the need for robust password security has never been more critical. Our approach provides an adaptive security model that allows users to configure security parameters according to their specific requirements while maintaining visibility into the performance implications of their choices. Through extensive testing of various security configurations, we demonstrate how different parameters affect processing time and provide recommendations for both standard web applications and high-security environments. The system architecture comprises five key components: User Interface Layer, Password Manager Core, Cryptographic Module, Storage Layer, and Performance Tracking System, all working together to deliver a comprehensive password security solution.
 \section{Introduction}
 
             \subsection{Overview of the task}
@@ -96,7 +96,7 @@ With data breaches exposing over 15 billion records in 2023 alone and password t
 \section{Background and Solution Approach} 
 \subsection{Related Work}
 Password-based authentication remains the predominant method for securing user accounts despite its known limitations. \cite{bonneau2012quest} conducted a comprehensive analysis of authentication schemes, concluding that password-based schemes, while problematic, continue to dominate due to their deployability advantages. For password storage specifically, \cite{turan2018recommendation} proposed standardized methods for secure password hashing, emphasizing the importance of key derivation functions with tunable work factors like PBKDF2, which is implemented in our study application.
-The performance-security tradeoff in password hashing has been examined by \cite{visconti2020evaluate}, who evaluated various password hashing schemes across different platforms, demonstrating how computational costs vary significantly based on implementation choices. Their work provides valuable benchmarks for assessing the efficiency claims in our target paper. Similarly, \cite{pesante2021empirical} conducted an empirical study of client-side password hashing performance, particularly relevant to our web-based implementation that performs cryptographic operations in the browser. Our work differs from these studies by specifically examining the reproducibility of performance claims made in the original paper about PBKDF2 implementation in browser environments. Additionally, we extend previous work by analyzing the robustness of the password security implementation against varying client hardware capabilities, an aspect often overlooked in theoretical security analyses but critical for real-world deployments.
+The performance-security tradeoff in password hashing has been examined by \cite{visconti2020evaluate}, who evaluated various password hashing schemes across different platforms, demonstrating how computational costs vary significantly based on implementation choices. Similarly, \cite{pesante2021empirical} conducted an empirical study of client-side password hashing performance, particularly relevant to our web-based implementation that performs cryptographic operations in the browser. Our work differs from these studies by specifically examining the reproducibility of performance claims made in the original paper about PBKDF2 implementation in browser environments. Additionally, we extend previous work by analyzing the robustness of the password security implementation against varying client hardware capabilities, an aspect often overlooked in theoretical security analyses but critical for real-world deployments.
 
 \subsection{Solution Approach}
 \subsubsection{Hashing Fundamentals}
@@ -158,7 +158,7 @@ This architectural component utilizes timing functions based on the browser's Pe
 
 The Performance Tracking System represents a novel approach to password security by making the typically invisible consequences of security decisions visible to users. By providing concrete metrics on how security parameters affect operation time, users can make informed decisions about the appropriate balance between security and performance for their specific use cases.
 
-Together, these five architectural components form a comprehensive system that delivers both security and usability while providing unprecedented transparency regarding the performance implications of security decisions. The modular design allows for future enhancements to individual components without requiring wholesale system redesign.RetryClaude can make mistakes. Please double-check responses.
+Together, these five architectural components form a comprehensive system that delivers both security and usability while providing unprecedented transparency regarding the performance implications of security decisions. The modular design allows for future enhancements to individual components without requiring wholesale system redesign.
 \begin{figure*}
 \centering
 \includegraphics[width=1\linewidth]{images/UI.png}
@@ -263,10 +263,6 @@ This visual comparison clearly illustrates the exponential nature of the securit
 Despite the substantial increase in processing time for maximum security configurations, all tested parameters remained within acceptable bounds for web application use, with even the most secure configuration completing in under 150ms. This finding suggests that for most applications, security parameters can be set to relatively high values without compromising user experience, provided that authentication operations occur infrequently from the user's perspective.
 
 Through this comprehensive experimental analysis, we have established quantitative benchmarks for security-performance tradeoffs across multiple cryptographic parameters. These empirical results provide an evidence-based foundation for security configuration decisions, allowing system architects to make informed choices based on their specific security requirements and performance constraints.
-
-
-\subsection{Results}
-Provide a table comparing your results to the published results.
 
 \section{Robustness Study}
 
