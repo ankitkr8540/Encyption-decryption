@@ -205,7 +205,7 @@ The integration also addresses security concerns specific to the browser environ
 Through this careful integration of the Web Crypto API, the implementation achieves a balance between security, performance, and standards compliance within the constraints of a browser-based environment. The resulting system provides strong cryptographic protection while maintaining usability and cross-platform compatibility.
 
 \section{Experimental Analysis}
-This section presents a systematic analysis of the performance characteristics and security implications of various cryptographic configurations within the Secure Password Manager. Through controlled experiments, we evaluated multiple parameters to quantify their impact on processing time and overall system performance, providing empirical evidence to inform security-performance tradeoffs.
+This section presents a systematic analysis of the performance characteristics and security implications of various cryptographic configurations within the Secure Password Manager. Through controlled experiments (as shown in Appendix~\ref{sec:table-values}), we evaluated multiple parameters to quantify their impact on processing time and overall system performance, providing empirical evidence to inform security-performance tradeoffs.
 
 \subsection{Experiment Overview}
 Our experimental methodology was designed to isolate and measure the performance impact of individual security parameters while maintaining controlled conditions across all tests. We conducted a comprehensive evaluation of various password security configurations, examining multiple dimensions of the cryptographic implementation:
@@ -406,7 +406,29 @@ We developed targeted recommendations for both standard and high-security enviro
 Our modular architecture facilitates future enhancements while maintaining security integrity. Despite its robust design, the system has limitations including browser-based performance variability and local storage constraints. Future work directions include multi-factor authentication, adaptive iteration counts based on device capability, and server-side implementation options.
 
 In conclusion, effective password security requires not only strong cryptographic foundations but also transparency about security-performance tradeoffs and adaptability to diverse operational contexts. Our approach represents a significant advancement in practical password security that balances theoretical protection with real-world usability constraints.
-
+\appendix
+\section{Experiment Values}
+\label{sec:table-values}
+\begin{table}[htbp]
+  \centering
+  \caption{Password Security Configuration Performance Measurements}
+  \label{tab:password-security}
+  \setlength{\tabcolsep}{4pt}  % Reduce horizontal spacing between columns
+  \small  % Use smaller font
+  \begin{tabular}{|l|c|c|c|c|c|c|c|}
+  \hline
+  \textbf{Test} & \textbf{Pass-} & \textbf{Hash} & \textbf{Salt} & \textbf{Iter-} & \textbf{Key} & \textbf{Enc.} & \textbf{Dec.} \\
+  \textbf{Name} & \textbf{word} & \textbf{Func.} & \textbf{(B)} & \textbf{ations} & \textbf{(bit)} & \textbf{(ms)} & \textbf{(ms)} \\
+  \hline
+  SHA-256 & 12345 & SHA-256 & 16 & 10K & 128 & 6.2 & 3.0 \\
+  SHA-384 & 12345 & SHA-384 & 16 & 10K & 128 & 8.0 & 8.7 \\
+  SHA-512 & 12345 & SHA-512 & 16 & 10K & 128 & 8.3 & 9.8 \\
+  Salt-24 & 12345 & SHA-256 & 24 & 10K & 128 & 4.0 & 4.5 \\
+  Salt-32 & 12345 & SHA-256 & 32 & 10K & 128 & 5.1 & 4.2 \\
+  Iter-512 & 12345... & SHA-512 & 32 & 500K & 512 & 144.1 & 144.2 \\
+  \hline
+  \end{tabular}
+  \end{table}
 % \section{Credits}
 
 % This document has been adapted from the instructions
