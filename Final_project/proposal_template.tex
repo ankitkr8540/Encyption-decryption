@@ -35,7 +35,7 @@
   G01413546 \\
   \texttt{atewary@gmu.edu} \\\And
   Ankit Kumar\\
-  G0xxxx\\
+  G01436204\\
   \texttt{akumar37@gmu.edu} \\\And 
   Lingyun Dai\\ 
   G01464288\\ 
@@ -116,16 +116,17 @@ Iteration count serves as a critical control mechanism for balancing security an
 The solution implements an adaptive security approach for password management through user-configurable security parameters and performance tracking transparency. Users can select their desired security level via configurable PBKDF2 iteration counts (10,000 to 500,000), choice of hash functions (SHA-256/384/512), adjustable key length (128-512 bits), and cryptographically secure salt generation (16/24/32 bytes). This adaptability is complemented by clear feedback on encoding and verification time, records of hash generation time, verification time during login, and comparative performance data when updating passwords. The system utilizes modern cryptographic practices including PBKDF2 with SHA-256 for key derivation, unique salt per password to prevent rainbow table attacks, and the secure Web Crypto API for standardized implementation. This comprehensive approach allows organizations to optimize the security-performance balance according to their specific requirements and threat models.
 
 \section{System Architecture}
-The architecture of the Secure Password Manager is designed as a modular system comprised of five distinct but integrated components. These components work in concert to deliver a comprehensive solution that balances security with usability while providing transparency regarding performance implications. This section details each architectural component and its role within the overall system.
-\begin{figure}
+\begin{figure*}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/system_design.png}
-    \caption{Your figure caption here}
-    \label{fig:your-label}
-\end{figure}
+    \includegraphics[width=1\linewidth]{images/system_design.png}
+    \caption{System Architecture of the Secure Password Manager}
+    \caption*{The architecture of the Secure Password Manager is designed as a modular system comprised of five distinct but integrated components. These components work in concert to deliver a comprehensive solution that balances security with usability while providing transparency regarding performance implications. This section details each architectural component and its role within the overall system.}
+    \label{Architecture}
+\end{figure*}
+The architecture of the Secure Password Manager is designed as a modular system comprised of five distinct but integrated components. These components work in concert to deliver a comprehensive solution that balances security with usability while providing transparency regarding performance implications. This section details each architectural component and its role within the overall system. Figure \ref{Architecture} illustrates the system architecture, which includes the following components:
 
 \subsection{User Interface Layer}
-The User Interface Layer serves as the primary interaction point between users and the password management system. This component provides interactive controls and visual displays for all user operations within the system. The implementation utilizes HTML5, CSS3, and JavaScript event handling to create a responsive and informative interface.
+The User Interface Layer serves as the primary interaction point between users and the password management system. This component provides interactive controls and visual displays for all user operations within the system. The implementation utilizes HTML5, CSS3, and JavaScript event handling to create a responsive and informative interface. Figure \ref{UI} illustrates the user interface design, which includes a registration form, login form, and management forms for user operations.
 
 Key components of this layer include registration, login, and management forms that facilitate user operations. Security parameter configuration controls allow users to adjust security settings according to their specific requirements. A status message system provides immediate feedback on operation success or failure, enhancing usability through clear communication. The user database display offers visibility into stored credentials and their security characteristics.
 
@@ -158,8 +159,15 @@ This architectural component utilizes timing functions based on the browser's Pe
 The Performance Tracking System represents a novel approach to password security by making the typically invisible consequences of security decisions visible to users. By providing concrete metrics on how security parameters affect operation time, users can make informed decisions about the appropriate balance between security and performance for their specific use cases.
 
 Together, these five architectural components form a comprehensive system that delivers both security and usability while providing unprecedented transparency regarding the performance implications of security decisions. The modular design allows for future enhancements to individual components without requiring wholesale system redesign.RetryClaude can make mistakes. Please double-check responses.
+\begin{figure*}
+\centering
+\includegraphics[width=1\linewidth]{images/UI.png}
+\caption{User Interface Layer}
+\caption*{The User Interface Layer serves as the primary interaction point between users and the password management system. This component provides interactive controls and visual displays for all user operations within the system. The implementation utilizes HTML5, CSS3, and JavaScript event handling to create a responsive and informative interface.}
+\label{UI}
+\end{figure*}
 
-\textbf{INSERT SYS DESIGN FIGURE HERE}
+% \textbf{INSERT SYS DESIGN FIGURE HERE}
 \section{Implementation Details}
 This section provides a detailed examination of the implementation aspects of the Secure Password Manager, focusing on the cryptographic techniques employed, the deliberate performance constraints introduced for security purposes, and the integration with standardized cryptographic APIs. The implementation represents a practical application of theoretical security principles within the constraints of a web-based environment.
 \subsection{Core Cryptographic Implementation}
@@ -172,12 +180,14 @@ The security design incorporates several critical features to ensure comprehensi
 The system adheres to best security practices by never storing the original passwords, instead maintaining only the derived key and salt information. This approach ensures that even in the event of a system compromise, the original credentials remain protected. The verification process implements constant-time comparison to prevent timing attacks that might otherwise reveal information about password validity.
 
 The implementation carefully considers the security-performance tradeoff, using high-precision timestamps to track the computational cost of different security configurations. These measurements provide transparency about the impact of security decisions and allow users to make informed choices based on their specific requirements and constraints.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=1\linewidth]{images/Algo.png}
-    \caption{Your figure caption here}
-    \label{fig:your-label}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=1\linewidth]{images/Algo1.jpg}
+  \includegraphics[width= 1\linewidth]{images/Algo2.jpg}
+  \caption{ImportedKey and deriveBits functions of Web Crypto API}
+  \label{Algorithms}
 \end{figure}
+
 \subsection{Slow Hashing Implementation}
 The Password-Based Key Derivation Function 2 (PBKDF2) serves as the central slow hashing mechanism in this implementation. Unlike traditional hash functions designed for computational efficiency, PBKDF2 purposefully increases the computational cost of password hashing, creating a significant barrier against brute-force and dictionary attacks.
 
@@ -189,7 +199,7 @@ The implementation utilizes the Web Crypto API to ensure that comparisons occur 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=1\linewidth]{images/Salt.png}
-  \caption{Your figure caption here}
+  \caption{Salt Generation}
   \label{fig:your-label}
 \end{figure}
 \subsection{Web Crypto API Integration}
